@@ -45,11 +45,11 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "7860"
 	}
 
 	log.Println("Server started on :" + port)
-	
+
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
@@ -76,7 +76,6 @@ func reservationsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-
 
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
@@ -113,15 +112,14 @@ func reservationsHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodGet {
 		rows, err := db.Query(ctx,
-			 `SELECT name, phone, date::TEXT, time::TEXT, guests FROM reservations`)
+			`SELECT name, phone, date::TEXT, time::TEXT, guests FROM reservations`)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		defer rows.Close()
 
-		
-		reservations := []Reservation{} 
+		reservations := []Reservation{}
 
 		for rows.Next() {
 			var r Reservation
