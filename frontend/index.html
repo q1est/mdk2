@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Кафе «Пьяный Гейгер»</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<!-- TOP NAVIGATION -->
+<body>
+  <body class="home-page">
+
+</nav>
+
+
+
+
+
+
+<header class="hero">
+  <div class="hero-overlay">
+    <h1><span class="radiation">бар «Пьяный Гейгер»</span></h1>
+    <p>
+      Аномальная кухня для сталкеров и сочувствующих.<br>
+      Побочные эффекты — часть впечатления.
+    </p>
+  </div>
+</header>
+
+<section class="hero-nav">
+  <div class="hero-nav-buttons">
+    <a href="menu.html" class="hero-nav-btn">Наше меню</a>
+
+    <button class="hero-nav-btn" id="scrollToBooking">
+      Бронирование
+    </button>
+
+    <button class="hero-nav-btn" id="scrollToContacts">
+      Контакты и отзывы
+    </button>
+  </div>
+</section>
+
+
+<section class="daily-set">
+  <div class="daily-set-card">
+    <h2 class="daily-set-title">☢️ Сет дня</h2>
+    <p class="daily-set-description">
+      <strong>Сет:</strong> Аномальный пирог и Мутационный чай по промокоду "ай мляяяяяяяяяяяяяяяяяя", просто скажи это бармену и получи свой сет <br>
+      всего за <span class="daily-set-price">500 ₽</span>!
+    </p>
+  </div>
+</section>
+<!-- BOOKING MODAL -->
+<div class="booking-modal" id="bookingModal">
+  <div class="booking-window">
+    <button class="booking-close" id="closeBooking">×</button>
+    
+    <h2 class="booking-title">Бронирование столика</h2>
+    <p class="booking-subtitle">
+      Зарезервируйте место в безопасной зоне. Гарантия от аномалий не предусмотрена.
+    </p>
+
+    <form class="booking-form" id="bookingForm">
+      <div class="form-group">
+        <label for="name">Позывной / Имя *</label>
+        <input type="text" id="name" name="name" placeholder="Меченый" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="phone">Телефон *</label>
+          <div class="phone-input-wrapper">
+            <span class="phone-prefix">+7</span>
+            <input 
+              type="tel" 
+              id="phone" 
+              name="phone" 
+              placeholder="9001234567" 
+              pattern="[0-9]{10}"
+              maxlength="10"
+              required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="необязательно">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="date">Дата визита *</label>
+          <input type="date" id="date" name="date" required>
+        </div>
+
+        <div class="form-group">
+          <label for="time">Время *</label>
+          <input type="time" id="time" name="time" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="guests">Количество гостей *</label>
+          <select id="guests" name="guests" required>
+            <option value="">Выберите</option>
+            <option value="1">1 сталкер</option>
+            <option value="2">2 сталкера</option>
+            <option value="3">3 сталкера</option>
+            <option value="4">4 сталкера</option>
+            <option value="5">5 сталкеров</option>
+            <option value="6+">6+ (группировка)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="zone">Предпочитаемая зона</label>
+          <select id="zone" name="zone">
+            <option value="">Выберите</option>
+            <option value="safe">Безопасная зона</option>
+            <option value="bar">У барной стойки</option>
+            <option value="window">У окна (вид на развалины)</option>
+            <option value="corner">Укромный угол</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="comments">Особые пожелания</label>
+        <textarea id="comments" name="comments" placeholder="Нужен детектор аномалий? Антирад на стол? Пишите здесь..."></textarea>
+      </div>
+
+      <button type="submit" class="booking-submit">Забронировать</button>
+
+      <div class="warning-text">
+        ⚠️ <strong>Внимание:</strong> Администрация не несёт ответственности за психические и физические эффекты, вызванные употреблением блюд. Рекомендуется иметь при себе аптечку и счётчик Гейгера.
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- BOOKING CTA -->
+<section class="booking-cta" id="booking">
+  <div class="booking-cta-card">
+    <h2>Готовы войти в Зону?</h2>
+    <p>Забронируйте столик заранее и получите антирад в подарок</p>
+    <button class="booking-cta-btn" id="ctaBookingBtn">Забронировать столик</button>
+  </div>
+</section>
+
+<section id="contacts" class="contacts">
+  <h2 class="contacts-title">Контакты</h2>
+
+  <div class="contacts-grid">
+    <div class="contact-card">
+      <h3>Адрес</h3>
+      <p>
+        Чернобыль-2<br>
+        Киевская область<br>
+        Украина
+      </p>
+    </div>
+
+    <div class="contact-card">
+      <h3>Телефоны</h3>
+      <p>
+        Администратор:<br>
+        <a href="tel:+79114754969">+7 911 475-49-69</a>
+      </p>
+    </div>
+
+    <div class="contact-card">
+      <h3>Режим работы</h3>
+      <p>
+        Пн–Чт: 12:00–23:00<br>
+        Пт–Сб: 12:00–00:00<br>
+        Вс: 12:00–22:00
+      </p>
+    </div>
+  </div>
+</section>
+<!-- ===== REVIEWS ===== -->
+<section class="reviews">
+  <h2 class="reviews-title">Отзывы сталкеров</h2>
+
+  <div class="reviews-grid">
+
+    <div class="review-card">
+      <p class="review-text">
+        "Зашёл на чай — вышел с просветлением. Или это была радиация? 
+        В любом случае, 10/10."
+      </p>
+      <div class="review-author">— Меченый</div>
+    </div>
+
+    <div class="review-card">
+      <p class="review-text">
+        "Жаркое из мутантов — агрессия действительно пропадает. 
+        Проверено на всей группировке."
+      </p>
+      <div class="review-author">— Свобода</div>
+    </div>
+
+    <div class="review-card">
+      <p class="review-text">
+        "Чесночный суп отпугнул не только мутантов, но и тёщу. 
+        Благодарю администрацию."
+      </p>
+      <div class="review-author">— Анонимный сталкер</div>
+    </div>
+
+    <div class="review-card">
+      <p class="review-text">
+        "После аномального пирога вижу будущее. 
+        Оно зелёное и светится."
+      </p>
+      <div class="review-author">— Проводник</div>
+    </div>
+
+  </div>
+</section>
+
+</form>
+
+<footer>
+© Бар «Пьяный Гейгер». Вход на свой страх и риск.
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
