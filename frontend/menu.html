@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Меню — Пьяный Гейгер</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<a href="index.html" class="back-home-btn">
+  ← На главную
+</a>
+
+<button class="cart-btn" id="cartBtn">
+  🛒
+  <span class="cart-count" id="cartCount">0</span>
+</button>
+
+<div class="cart-modal" id="cartModal">
+  <div class="cart-window">
+    <h2>Корзина</h2>
+    <ul class="cart-list" id="cartList"></ul>
+
+    <div class="cart-total">
+      <span>Итого:</span>
+      <span id="totalPrice">0 ₽</span>
+    </div>
+
+    <button class="order-btn" id="orderBtn">Заказать</button>
+    <button class="cart-close" id="closeCart">Закрыть</button>
+  </div>
+</div>
+
+<header style="padding:60px 20px 20px; text-align:center;">
+  <h1>Наше меню</h1>
+</header>
+
+
+
+<nav>
+  <button class="active" data-target="snacks">Закуски</button>
+  <button data-target="main">Основные</button>
+  <button data-target="desserts">Десерты</button>
+  <button data-target="drinks">Напитки</button>
+</nav>
+
+<main>
+
+<section class="category active" id="snacks">
+  <div class="item">
+    <img src="радость_туриста.png" class="item-image">
+    <div class="item-content">
+      <button class="add-to-cart">+</button>
+      <h3>Тушёнка «Радость туриста»</h3>
+      <p>Консервированное мясо неизвестного происхождения.</p>
+      <span class="price">299 ₽</span>
+    </div>
+  </div>
+</section>
+
+<section class="category" id="main">
+  <div class="item">
+    <img src="жаркое_из_мутантов.png" class="item-image">
+    <div class="item-content">
+      <button class="add-to-cart">+</button>
+      <h3>Жаркое из мутантов</h3>
+      <p>Медленно томится до полной потери агрессии.</p>
+      <span class="price">699 ₽</span>
+    </div>
+  </div>
+
+  <div class="item">
+    <img src="чесночный_суп.png" class="item-image">
+    <div class="item-content">
+      <button class="add-to-cart">+</button>
+      <h3>Чесночный суп</h3>
+      <p>Отпугивает мутантов и людей в радиусе трёх метров.</p>
+      <span class="price">1099 ₽</span>
+    </div>
+  </div>
+</section>
+
+<section class="category" id="desserts">
+  <div class="item">
+    <img src="пирог.png" class="item-image">
+    <div class="item-content">
+      <button class="add-to-cart">+</button>
+      <h3>Аномальный пирог</h3>
+      <p>Мутировавшие ягоды. Возможны эффекты.</p>
+      <span class="price">499 ₽</span>
+    </div>
+  </div>
+</section>
+
+<section class="category" id="drinks">
+  <div class="item">
+    <img src="коктейль.png" class="item-image">
+    <div class="item-content">
+      <button class="add-to-cart">+</button>
+      <h3>Радиационный коктейль</h3>
+      <p>Светится в темноте. Иногда.</p>
+      <span class="price">249 ₽</span>
+    </div>
+  </div>
+
+  <div class="item">
+    <img src="чай.png" class="item-image">
+    <div class="item-content">
+      <button class="add-to-cart">+</button>
+      <h3>Мутационный чай</h3>
+      <p>Свойства не задокументированы. Возможно будет похмелье.</p>
+      <span class="price">99 ₽</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+© Бар «Пьяный Гейгер». Вход на свой страх и риск.
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
