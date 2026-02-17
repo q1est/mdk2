@@ -24,11 +24,14 @@ func main() {
 	ctx := context.Background()
 
 	databaseURL := os.Getenv("DATABASE_URL")
+	if databaseURL == "" {
+		log.Fatal("DATABASE_URL is not set!")
+	}
 
 	var err error
 	db, err = pgxpool.New(ctx, databaseURL)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Unable to connect to database:", err)
 	}
 
 	err = db.Ping(ctx)
@@ -40,8 +43,14 @@ func main() {
 
 	http.HandleFunc("/api/reservations", reservationsHandler)
 
-	log.Println("Server started on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	log.Println("Server started on :" + port)
+	
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
 func createTable(ctx context.Context) {
@@ -111,7 +120,7 @@ func reservationsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		defer rows.Close()
 
-		// Чтобы не возвращать null, если база пуста, инициализируем слайс
+		
 		reservations := []Reservation{} 
 
 		for rows.Next() {
