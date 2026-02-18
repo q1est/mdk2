@@ -151,7 +151,7 @@ if (bookingForm) {
     }
 
     try {
-      const response = await fetch("https://qwefsdfsdsg-mdk.hf.space", {
+      const response = await fetch("https://qwefsdfsdsg-mdk.hf.spaceapi/reservations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
