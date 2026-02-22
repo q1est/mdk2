@@ -120,6 +120,49 @@
 <footer>
 © Бар «Пьяный Гейгер». Вход на свой страх и риск.
 </footer>
+<!-- ===== ORDER MODAL ===== -->
+<div class="booking-modal" id="orderModal">
+  <div class="booking-window">
+    <button class="booking-close" id="closeOrder">×</button>
+
+    <h2 class="booking-title">Оформление заказа</h2>
+    <p class="booking-subtitle">
+      Укажите данные для доставки. Курьер уже надевает противогаз.
+    </p>
+
+    <form class="booking-form" id="orderForm">
+
+      <div class="form-group">
+        <label for="orderName">Имя *</label>
+        <input type="text" id="orderName" required>
+      </div>
+
+      <div class="form-group">
+        <label for="orderPhone">Телефон *</label>
+        <div class="phone-input-wrapper">
+          <span class="phone-prefix">+7</span>
+          <input 
+            type="tel"
+            id="orderPhone"
+            placeholder="9001234567"
+            pattern="[0-9]{10}"
+            maxlength="10"
+            required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="orderAddress">Адрес доставки *</label>
+        <textarea id="orderAddress" required placeholder="Улица, дом, квартира..."></textarea>
+      </div>
+
+      <button type="submit" class="booking-submit">
+        Подтвердить заказ
+      </button>
+
+    </form>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>

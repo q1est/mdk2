@@ -77,6 +77,11 @@ if (cartBtn)
 if (closeCart)
   closeCart.onclick = () => cartModal.style.display = "none";
 
+const orderModal = document.getElementById("orderModal");
+const closeOrder = document.getElementById("closeOrder");
+const orderForm = document.getElementById("orderForm");
+const orderPhone = document.getElementById("orderPhone");
+
 if (orderBtn)
   orderBtn.onclick = () => {
     if (!cart.length) {
@@ -84,11 +89,22 @@ if (orderBtn)
       return;
     }
 
-    alert("Заказ оформлен! Сталкеры уже выдвинулись 🚶‍♂️");
-    cart.length = 0;
-    updateCart();
     cartModal.style.display = "none";
+    orderModal.classList.add("active");
   };
+
+if (closeOrder)
+  closeOrder.onclick = () => {
+    orderModal.classList.remove("active");
+  };
+
+if (orderModal)
+  orderModal.addEventListener("click", (e) => {
+    if (e.target === orderModal) {
+      orderModal.classList.remove("active");
+    }
+  });
+
 
 // ===== BOOKING MODAL =====
 const bookingModal = document.getElementById("bookingModal");
@@ -118,11 +134,18 @@ const phoneInput = document.getElementById("phone");
 const dateInput = document.getElementById("date");
 const timeInput = document.getElementById("time");
 
+
 if (phoneInput) {
   phoneInput.addEventListener("input", (e) => {
     e.target.value = e.target.value.replace(/\D/g, '').substring(0, 10);
   });
 }
+if (orderPhone) { 
+  orderPhone.addEventListener("input", (e) => {
+    e.target.value = e.target.value.replace(/\D/g, '').substring(0, 10);
+  });
+}
+
 
 if (dateInput) {
   const today = new Date().toISOString().split('T')[0];
@@ -184,7 +207,7 @@ const scrollToContacts = document.getElementById("scrollToContacts");
 if (scrollToContacts) {
   scrollToContacts.addEventListener("click", () => {
     document.getElementById("contacts").scrollIntoView({
-      behavior: "smooth",
+      behavior: "smooth", 
       block: "center"
     });
   });
@@ -199,3 +222,36 @@ if (scrollToBooking) {
     });
   });
 }
+if (orderPhone) {
+  orderPhone.addEventListener("input", (e) => {
+    e.target.value = e.target.value.replace(/\D/g, '').substring(0, 10);
+  });
+}
+
+if (orderForm) {
+  orderForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("orderName").value;
+    const phone = orderPhone.value;
+    const address = document.getElementById("orderAddress").value;
+
+    if (phone.length !== 10) {
+      alert("⚠️ Номер телефона должен содержать 10 цифр!");
+      return;
+    }
+
+    if (!address.trim()) {
+      alert("⚠️ Укажите адрес доставки!");
+      return;
+    }
+
+    alert("Заказ оформлен! Сталкеры уже выдвинулись 🚶‍♂️");
+
+    cart.length = 0;
+    updateCart();
+    orderForm.reset();
+    orderModal.classList.remove("active");
+  });
+}
+

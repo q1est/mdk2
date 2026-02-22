@@ -880,3 +880,21 @@ html {
   opacity: 1;
   transform: translateY(0);
 }
+/* ===== HERO NAV FIX MOBILE ===== */
+@media (max-width: 768px) {
+
+  .hero-nav-buttons {
+    flex-wrap: nowrap;       /* запрещаем перенос */
+    gap: 12px;
+  }
+
+  .hero-nav-btn {
+    flex: 1;                 /* все кнопки равной ширины */
+    text-align: center;
+    padding: 14px 10px;
+    font-size: 14px;
+    white-space: nowrap;     /* текст не переносится */
+  }
+
+}
+
