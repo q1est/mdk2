@@ -81,6 +81,7 @@ const orderModal = document.getElementById("orderModal");
 const closeOrder = document.getElementById("closeOrder");
 const orderForm = document.getElementById("orderForm");
 const orderPhone = document.getElementById("orderPhone");
+const orderTelegram = document.getElementById("orderTelegram"); 
 
 if (orderBtn)
   orderBtn.onclick = () => {
@@ -235,6 +236,7 @@ if (orderForm) {
     const name = document.getElementById("orderName").value;
     const phone = orderPhone.value;
     const address = document.getElementById("orderAddress").value;
+    const tg = orderTelegram.value.trim();
 
     if (phone.length !== 10) {
       alert("⚠️ Номер телефона должен содержать 10 цифр!");
@@ -245,7 +247,11 @@ if (orderForm) {
       alert("⚠️ Укажите адрес доставки!");
       return;
     }
-
+    // ✅ СНАЧАЛА проверка
+    if (!tg.startsWith("@")) {
+      alert("⚠️ Telegram username должен начинаться с @");
+      return;
+    }
     alert("Заказ оформлен! Сталкеры уже выдвинулись 🚶‍♂️");
 
     cart.length = 0;
