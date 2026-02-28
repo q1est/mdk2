@@ -32,7 +32,7 @@ func ConnectDBOrder() {
 
 func createTableOrder(ctx context.Context) {
 	query := `
-	CREATE TABLE IF NOT EXISTS reservations (	 
+	CREATE TABLE IF NOT EXISTS orders (	 
 id SERIAL PRIMARY KEY,
 		name TEXT NOT NULL,
 		phone TEXT NOT NULL,

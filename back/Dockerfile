@@ -4,12 +4,12 @@ FROM golang:1.24-alpine AS builder
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Копируем файлы зависимостей
-COPY go.mod go.sum ./
+# Копируем файлы зависимостей (поддерживает сборку из корня репозитория)
+COPY back/go.mod back/go.sum ./
 RUN go mod download
 
-# Копируем исходный код
-COPY . .
+# Копируем исходный код (копируем содержимое папки back в рабочую директорию)
+COPY back/ ./
 
 # Собираем бинарный файл (статический, для работы в минимальном образе)
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .

@@ -30,7 +30,7 @@ func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 
 		// Здесь можно добавить код для сохранения заказа в базу данных
 
-		_, err := db.PoolOrder.Exec(ctx, `INSERT INTO ordeers (name, phone, address, telegram, items, total) VALUES ($1,$2,$3,$4,$5,$6)`,
+		_, err := db.PoolOrder.Exec(ctx, `INSERT INTO orders (name, phone, address, telegram, items, total) VALUES ($1,$2,$3,$4,$5,$6)`,
 			order.Name, order.Phone, order.Address, order.Telegram, order.Items, order.Total,
 		)
 		if err != nil {
@@ -45,7 +45,7 @@ func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 
 	}
 	if r.Method == http.MethodGet {
-		rowsOrder, err := db.PoolOrder.Query(ctx, `SELECT name, phone, address, telegram, items, total FROM ordeers`)
+		rowsOrder, err := db.PoolOrder.Query(ctx, `SELECT name, phone, address, telegram, items, total FROM orders`)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
