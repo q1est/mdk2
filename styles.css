@@ -715,6 +715,7 @@ html {
   background: #6aff8f;
   color: #000;
   border: none;
+<<<<<<< HEAD
   border-radius: 16px;
 
   width: 100px;
@@ -733,6 +734,23 @@ html {
   transition: all 0.25s ease;
   text-decoration: none;
 
+=======
+  border-radius: 8px;
+
+  height: 48px;
+  padding: 0 32px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+
+>>>>>>> 9a7ee72ca756d18c7795a075a137a885047e03f7
   appearance: none;
   -webkit-appearance: none;
 }

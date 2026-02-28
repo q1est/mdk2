@@ -252,7 +252,8 @@ if (orderForm) {
       alert("⚠️ Telegram username должен начинаться с @ ⚠️");
       return;
     }
-    alert("🚶‍♂️ Заказ оформлен! Сталкеры уже выдвинулись 🚶‍♂️");
+
+    alert("Заказ оформлен! Сталкеры уже выдвинулись 🚶‍♂️");
 
     cart.length = 0;
     updateCart();
