@@ -81,11 +81,12 @@ const orderModal = document.getElementById("orderModal");
 const closeOrder = document.getElementById("closeOrder");
 const orderForm = document.getElementById("orderForm");
 const orderPhone = document.getElementById("orderPhone");
+const orderTelegram = document.getElementById("orderTelegram"); 
 
 if (orderBtn)
   orderBtn.onclick = () => {
     if (!cart.length) {
-      alert("Корзина пуста ☢️");
+      alert("☢️ Корзина пуста ☢️");
       return;
     }
 
@@ -163,13 +164,13 @@ if (bookingForm) {
     const guests = document.getElementById("guests").value;
 
     if (phone.length !== 10) {
-      alert("⚠️ Номер телефона должен содержать 10 цифр!");
+      alert("⚠️ Номер телефона должен содержать 10 цифр! ⚠️");
       return;
     }
 
     const selectedDateTime = new Date(date + 'T' + time);
     if (selectedDateTime < new Date()) {
-      alert("⚠️ Нельзя выбрать прошедшее время!");
+      alert("⚠️ Нельзя выбрать прошедшее время! ⚠️");
       return;
     }
 
@@ -192,7 +193,7 @@ if (bookingForm) {
         throw new Error("Ошибка сервера");
       }
 
-      alert("Столик успешно забронирован! ☢️");
+      alert("☢️ Столик успешно забронирован! ☢️");
       bookingForm.reset();
       bookingModal.classList.remove("active");
 
@@ -235,18 +236,23 @@ if (orderForm) {
     const name = document.getElementById("orderName").value;
     const phone = orderPhone.value;
     const address = document.getElementById("orderAddress").value;
+    const tg = orderTelegram.value.trim();
 
     if (phone.length !== 10) {
-      alert("⚠️ Номер телефона должен содержать 10 цифр!");
+      alert("⚠️ Номер телефона должен содержать 10 цифр! ⚠️");
       return;
     }
 
     if (!address.trim()) {
-      alert("⚠️ Укажите адрес доставки!");
+      alert("⚠️ Укажите адрес доставки! ⚠️");
       return;
     }
-
-    alert("Заказ оформлен! Сталкеры уже выдвинулись 🚶‍♂️");
+    // ✅ СНАЧАЛА проверка
+    if (!tg.startsWith("@")) {
+      alert("⚠️ Telegram username должен начинаться с @ ⚠️");
+      return;
+    }
+    alert("🚶‍♂️ Заказ оформлен! Сталкеры уже выдвинулись 🚶‍♂️");
 
     cart.length = 0;
     updateCart();
