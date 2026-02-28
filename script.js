@@ -185,7 +185,8 @@ if (bookingForm) {
           phone: "+7" + phone,
           date,
           time,
-          guests: parseInt(guests)
+          guests: parseInt(guests),
+          coments
         })
       });
 
@@ -230,7 +231,7 @@ if (orderPhone) {
 }
 
 if (orderForm) {
-  orderForm.addEventListener("submit", (e) => {
+  orderForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const name = document.getElementById("orderName").value;
@@ -247,18 +248,50 @@ if (orderForm) {
       alert("⚠️ Укажите адрес доставки! ⚠️");
       return;
     }
-    // ✅ СНАЧАЛА проверка
+
+    // ✅ СНАЧАЛА проверка tg
     if (!tg.startsWith("@")) {
       alert("⚠️ Telegram username должен начинаться с @ ⚠️");
       return;
     }
 
-    alert("Заказ оформлен! Сталкеры уже выдвинулись 🚶‍♂️");
+    // подготовим данные для отправки
+    const orderItems = cart.slice();
+    let total = 0;
+    orderItems.forEach(item => {
+      total += prices[item] || 0;
+    });
 
-    cart.length = 0;
-    updateCart();
-    orderForm.reset();
-    orderModal.classList.remove("active");
+    try {
+      const response = await fetch("https://qwefsdfsdsg-mdk.hf.space/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          phone: "+7" + phone,
+          address,
+          telegram: tg,
+          items: orderItems,
+          total
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Ошибка сервера");
+      }
+
+      alert("🚶‍♂️ Заказ оформлен! Сталкеры уже выдвинулись 🚶‍♂️");
+      cart.length = 0;
+      updateCart();
+      orderForm.reset();
+      orderModal.classList.remove("active");
+
+    } catch (error) {
+      alert("Ошибка при отправке заказа");
+      console.error(error);
+    }
   });
 }
 

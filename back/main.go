@@ -12,7 +12,10 @@ func main() {
 
 	db.ConnectPostgres()
 	defer db.Pool.Close()
+	db.ConnectDBOrder()
+	defer db.PoolOrder.Close()
 
+	http.HandleFunc("/api/orders", handle.OrdersHandler)
 	http.HandleFunc("/api/reservations", handle.ReservationsHandler)
 
 	port := os.Getenv("PORT")

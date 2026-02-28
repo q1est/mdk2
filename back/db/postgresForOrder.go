@@ -8,43 +8,44 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-var Pool *pgxpool.Pool
+var PoolOrder *pgxpool.Pool
 
-func ConnectPostgres() {
+func ConnectDBOrder() {
 	ctx := context.Background()
-	databaseURL := os.Getenv("DATABASE_URL")
+	databaseURL := os.Getenv("DATABASE_URL_ORDER")
 	if databaseURL == "" {
 		log.Fatal("DATABASE_URL is not set!")
 	}
 
 	var err error
-	Pool, err = pgxpool.New(ctx, databaseURL)
+	PoolOrder, err = pgxpool.New(ctx, databaseURL)
 	if err != nil {
 		log.Fatal("Unable to connect to database:", err)
 	}
 
-	if err = Pool.Ping(ctx); err != nil {
+	if err = PoolOrder.Ping(ctx); err != nil {
 		log.Fatal("DB not reachable:", err)
 	}
 
-	createTable(ctx)
+	createTableOrder(ctx)
 }
 
-func createTable(ctx context.Context) {
+func createTableOrder(ctx context.Context) {
 	query := `
-	CREATE TABLE IF NOT EXISTS reservations (
-		id SERIAL PRIMARY KEY,
+	CREATE TABLE IF NOT EXISTS reservations (	 
+id SERIAL PRIMARY KEY,
 		name TEXT NOT NULL,
 		phone TEXT NOT NULL,
-		date DATE NOT NULL,
-		time TIME NOT NULL,
-		guests INT NOT NULL, 
-		coments TEXT,
+		address TEXT NOT NULL,
+		telegram TEXT NOT NULL,
+		items TEXT[] NOT NULL,
+		total INT NOT NULL,
 		created_at TIMESTAMP DEFAULT NOW()
-	);`
 
-	_, err := Pool.Exec(ctx, query)
+);`
+	_, err := PoolOrder.Exec(ctx, query)
 	if err != nil {
 		log.Fatal("Failed to create table:", err)
 	}
+
 }
