@@ -186,7 +186,7 @@ if (bookingForm) {
           date,
           time,
           guests: parseInt(guests),
-          coments
+       
         })
       });
 

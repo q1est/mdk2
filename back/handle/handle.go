@@ -87,8 +87,8 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		_, err := db.Pool.Exec(ctx,
-			`INSERT INTO reservations (name, phone, date, time, guests, coments) VALUES ($1,$2,$3,$4,$5,$6)`,
-			res.Name, res.Phone, res.Date, res.Time, res.Guests, res.Coments,
+			`INSERT INTO reservations (name, phone, date, time, guests) VALUES ($1,$2,$3,$4,$5,$6)`,
+			res.Name, res.Phone, res.Date, res.Time, res.Guests,
 		)
 
 		if err != nil {
@@ -103,7 +103,7 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodGet {
-		rows, err := db.Pool.Query(ctx, `SELECT name, phone, date::TEXT, time::TEXT, guests, coments FROM reservations`)
+		rows, err := db.Pool.Query(ctx, `SELECT name, phone, date::TEXT, time::TEXT, guests FROM reservations`)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -113,7 +113,7 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 		reservations := []models.Reservation{}
 		for rows.Next() {
 			var res models.Reservation
-			if err := rows.Scan(&res.Name, &res.Phone, &res.Date, &res.Time, &res.Guests, &res.Coments); err != nil {
+			if err := rows.Scan(&res.Name, &res.Phone, &res.Date, &res.Time, &res.Guests); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}

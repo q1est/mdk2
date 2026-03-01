@@ -6,7 +6,7 @@ type Reservation struct {
 	Date    string `json:"date"`
 	Time    string `json:"time"`
 	Guests  int    `json:"guests"`
-	Coments string `json:"coments"`
+
 }
 type Order struct {
 	Name     string   `json:"name"`

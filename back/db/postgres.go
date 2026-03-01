@@ -39,7 +39,6 @@ func createTable(ctx context.Context) {
 		date DATE NOT NULL,
 		time TIME NOT NULL,
 		guests INT NOT NULL, 
-		coments TEXT,
 		created_at TIMESTAMP DEFAULT NOW()
 	);`
 
