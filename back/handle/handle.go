@@ -87,7 +87,7 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		_, err := db.Pool.Exec(ctx,
-			`INSERT INTO reservations (name, phone, date, time, guests) VALUES ($1,$2,$3,$4,$5,$6)`,
+			`INSERT INTO reservations (name, phone, date, time, guests) VALUES ($1,$2,$3,$4,$5)`,
 			res.Name, res.Phone, res.Date, res.Time, res.Guests,
 		)
 
