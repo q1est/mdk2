@@ -13,24 +13,41 @@ buttons.forEach(btn => {
 
 // ===== PRICES =====
 const prices = {
-  "Тушёнка «Радость туриста»": 299,
-  "Жаркое из мутантов": 699,
-  "Чесночный суп": 1099,
-  "Аномальный пирог": 499,
-  "Радиационный коктейль": 249,
-  "Мутационный чай": 99
+  "Оливье": 350,
+  "Кукуруза": 250,
+  "Красная икра": 1099,
+  "Гороховая каша с мясом": 650,
+  "Макароны по-флотски": 600,
+  "Пшёнка с мясом": 620,
+  "Солянка": 700,
+  "Мороженое": 250,
+  "Пломбир": 300,
+  "Шоколадный пломбир": 320,
+  "Эскимо": 280,
+  "Брусничная водка": 400,
+  "Детское шампанское": 200,
+  "Пунш": 300,
+  "Шампанское": 350,
+  "Гороховый суп": 550,
+
 };
 
-const cart = [];
+const cart = {};
 const cartList = document.getElementById("cartList");
 const cartCount = document.getElementById("cartCount");
 const totalPriceEl = document.getElementById("totalPrice");
 
 // ===== ADD TO CART =====
 document.querySelectorAll(".add-to-cart").forEach(btn => {
-  btn.addEventListener("click", () => {                     
+  btn.addEventListener("click", () => {
     const title = btn.parentElement.querySelector("h3").textContent;
-    cart.push(title);
+
+    if (cart[title]) {
+      cart[title]++;
+    } else {
+      cart[title] = 1;
+    }
+
     updateCart();
   });
 });
@@ -40,37 +57,82 @@ function updateCart() {
 
   cartList.innerHTML = "";
   let total = 0;
+  let count = 0;
 
-  cart.forEach((item, index) => {
+  Object.entries(cart).forEach(([item, qty]) => {
     const price = prices[item] || 0;
-    total += price;
+    total += price * qty;
+    count += qty;
 
     const li = document.createElement("li");
+
     li.innerHTML = `
       <span>${item}</span>
-      <span class="cart-price">${price} ₽</span>
-      <button class="remove-item" data-index="${index}">✕</button>
+
+      <div class="cart-controls">
+        <button class="minus" data-item="${item}">−</button>
+        <span class="qty">${qty}</span>
+        <button class="plus" data-item="${item}">+</button>
+      </div>
+
+      <span class="cart-price">${price * qty} ₽</span>
     `;
+
     cartList.appendChild(li);
   });
 
-  if (cartCount) cartCount.textContent = cart.length;
+  if (cartCount) cartCount.textContent = count;
   if (totalPriceEl) totalPriceEl.textContent = total + " ₽";
 
-  document.querySelectorAll(".remove-item").forEach(btn => {
+  // ➕ добавить
+  document.querySelectorAll(".plus").forEach(btn => {
     btn.onclick = () => {
-      cart.splice(btn.dataset.index, 1);
+      cart[btn.dataset.item]++;
+      updateCart();
+    };
+  });
+
+  // ➖ убрать
+  document.querySelectorAll(".minus").forEach(btn => {
+    btn.onclick = () => {
+      const item = btn.dataset.item;
+      cart[item]--;
+
+      if (cart[item] <= 0) {
+        delete cart[item];
+      }
+
       updateCart();
     };
   });
 }
+
+
 
 // ===== CART MODAL =====
 const cartBtn = document.getElementById("cartBtn");
 const cartModal = document.getElementById("cartModal");
 const closeCart = document.getElementById("closeCart");
 const orderBtn = document.getElementById("orderBtn");
+// ===== CLEAR CART =====
+const clearCartBtn = document.getElementById("clearCart");
 
+if (clearCartBtn) {
+  clearCartBtn.addEventListener("click", () => {
+
+    if (Object.keys(cart).length === 0) {
+      alert("Корзина уже пуста ☢️");
+      return;
+    }
+
+    if (confirm("Очистить корзину?")) {
+      for (let item in cart) {
+      delete cart[item];
+      }   // очищаем массив
+      updateCart();      // обновляем интерфейс
+    }
+  });
+}
 if (cartBtn)
   cartBtn.onclick = () => cartModal.style.display = "flex";
 
@@ -85,7 +147,7 @@ const orderTelegram = document.getElementById("orderTelegram");
 
 if (orderBtn)
   orderBtn.onclick = () => {
-    if (!cart.length) {
+    if (Object.keys(cart).length === 0) {
       alert("☢️ Корзина пуста ☢️");
       return;
     }
@@ -256,10 +318,13 @@ if (orderForm) {
     }
 
     // подготовим данные для отправки
-    const orderItems = cart.slice();
+    const orderItems = Object.entries(cart).map(([name, qty]) => ({
+    name,
+    qty
+    }));
     let total = 0;
     orderItems.forEach(item => {
-      total += prices[item] || 0;
+    total += (prices[item.name] || 0) * item.qty;
     });
 
     try {
@@ -283,7 +348,9 @@ if (orderForm) {
       }
 
       alert("🚶‍♂️ Заказ оформлен! Сталкеры уже выдвинулись 🚶‍♂️");
-      cart.length = 0;
+      for (let item in cart) {
+      delete cart[item];
+      }
       updateCart();
       orderForm.reset();
       orderModal.classList.remove("active");
@@ -295,3 +362,4 @@ if (orderForm) {
   });
 }
 
+updateCart();

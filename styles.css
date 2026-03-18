@@ -188,17 +188,54 @@ html {
     }
 
     .item {
-      background: #161617;
-      border-radius: 12px;
-      padding: 24px;
-      position: relative;
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
 
+  position: relative;   /* ⭐ ключевой фикс */
+  overflow: hidden;     /* ⭐ обрезает градиент */
+  border-radius: 12px;  /* чтобы glow не резался */
+}
+
+  .item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+.item-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  height: 100%;
+}
+
+/* Кнопка + в правый верхний угол */
+.add-to-cart {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* Заголовок */
+.item-content h3 {
+  margin: 0 0 5px;
+}
+
+/* Описание */
+.item-content p {
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
+/* Цена вниз */
+.price {
+  margin-top: auto;
+  font-weight: bold;
+}
   .item:hover {
     transform: translateY(-6px) scale(1.02);
     box-shadow: 0 15px 35px rgba(106, 255, 143, 0.15);
@@ -319,15 +356,17 @@ html {
     }
 
     .cart-window {
-      background: #161617;
-      border-radius: 12px;
-      padding: 24px;
-      width: 90%;
-      max-width: 420px;
-      max-height: 80vh;
-      display: flex;
-      flex-direction: column;
-    }
+  background: #161617;
+  border-radius: 12px;
+  padding: 24px;
+  width: 90%;
+  max-width: 420px;
+  max-height: 80vh;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px; /* ⭐ одинаковые расстояния */
+}
 
     .cart-window h2 {
       margin-bottom: 12px;
@@ -342,13 +381,15 @@ html {
     }
 
     .cart-list li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid #222;
-      font-size: 14px;
-    }
+  display: grid;
+  grid-template-columns: 1fr 120px 70px;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  font-size: 14px;
+}
 
     .remove-item {
       background: none;
@@ -379,7 +420,7 @@ html {
   justify-content: space-between;
   font-size: 16px;
   font-weight: 500;
-  margin-bottom: 16px;
+
 }
 
 /* ===== ORDER BUTTON ===== */
@@ -391,7 +432,7 @@ html {
   border-radius: 8px;
   font-size: 15px;
   cursor: pointer;
-  margin-bottom: 10px;
+  
 }
 
 .order-btn:hover {
@@ -918,4 +959,79 @@ html {
     align-items: center;
     justify-content: center;
     text-align: center;
+}
+/* ===== YANDEX MAP ===== */
+.map-wrapper {
+  margin-top: 16px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #222;
+}
+
+.map-wrapper iframe {
+  display: block;
+  width: 100%;
+  filter: grayscale(40%) brightness(0.85);
+  transition: 0.3s ease;
+}
+
+.map-wrapper:hover iframe {
+  filter: grayscale(0%) brightness(1);
+}
+/* ===== CLEAR CART ===== */
+.clear-cart-btn {
+  background: transparent;
+  border: 1px solid #333;
+  color: #aaa;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: 0.2s ease;
+}
+
+.clear-cart-btn:hover {
+  border-color: #ff5c5c;
+  color: #ff5c5c;
+}
+/* ===== CART COUNTER ALIGN FIX ===== */
+
+.cart-controls {
+  display: grid;
+  grid-template-columns: 32px 44px 32px;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+
+  width: 120px; /* ⭐ фикс ширины */
+}
+
+.cart-controls button {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: #1f1f1f;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty {
+  width: 44px;
+  text-align: center;
+  font-weight: 600;
+
+  /* ⭐ делает цифры одинаковой ширины */
+  font-variant-numeric: tabular-nums;
+}
+.cart-controls button:hover {
+  background: #2a2a2a;
+}
+.cart-price {
+  text-align: right;
 }
