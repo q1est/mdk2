@@ -13,13 +13,15 @@ func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
-
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
 		return
 	}
-
 	ctx := context.Background()
+	if r.Method != http.MethodPost {
+		http.Error(w, "No Get, PLS!!!", http.StatusMethodNotAllowed)
+		return
+	}
 
 	if r.Method == http.MethodPost {
 		var order models.Order
@@ -27,11 +29,14 @@ func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+		ItemsJSON, err := json.Marshal(order.Items)
+		if err != nil {
+			http.Error(w, "Internal Server Error: JSON marshalling failed", http.StatusInternalServerError)
+			return
+		}
 
-		// Здесь можно добавить код для сохранения заказа в базу данных
-
-		_, err := db.PoolOrder.Exec(ctx, `INSERT INTO orders (name, phone, address, telegram, items, total) VALUES ($1,$2,$3,$4,$5,$6)`,
-			order.Name, order.Phone, order.Address, order.Telegram, order.Items, order.Total,
+		_, err = db.PoolOrder.Exec(ctx, `INSERT INTO orders (name, phone, address, telegram, items, total) VALUES ($1,$2,$3,$4,$5,$6)`,
+			order.Name, order.Phone, order.Address, order.Telegram, ItemsJSON, order.Total,
 		)
 		if err != nil {
 			log.Println("DB Insert error:", err)
@@ -79,6 +84,10 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 
 	ctx := context.Background()
 
+	if r.Method != http.MethodPost {
+		http.Error(w, "No Get, PLS!!!", http.StatusMethodNotAllowed)
+		return
+	}
 	if r.Method == http.MethodPost {
 		var res models.Reservation
 		if err := json.NewDecoder(r.Body).Decode(&res); err != nil {
