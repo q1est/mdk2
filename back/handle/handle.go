@@ -10,7 +10,7 @@ import (
 )
 
 func OrdersHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io/mdk2/menu.htm")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	if r.Method == http.MethodOptions {
@@ -24,6 +24,12 @@ func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodPost {
+		r.Body = http.MaxBytesReader(w, r.Body, 1024*10)
+
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, "Request too large", http.StatusBadRequest)
+			return
+		}
 		var order models.Order
 		if err := json.NewDecoder(r.Body).Decode(&order); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -73,7 +79,7 @@ func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io/mdk2/index.html")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 
@@ -89,6 +95,12 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method == http.MethodPost {
+		r.Body = http.MaxBytesReader(w, r.Body, 1024*10)
+
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, "Request too large", http.StatusBadRequest)
+			return
+		}
 		var res models.Reservation
 		if err := json.NewDecoder(r.Body).Decode(&res); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
