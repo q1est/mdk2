@@ -881,7 +881,8 @@ html {
 .daily-set-card,
 .booking-cta-card,
 .cart-window,
-.booking-window {
+.booking-windowм
+.dish-window {
   position: relative;
   transition: all 0.3s ease;
   border: 1px solid #222;
@@ -894,7 +895,8 @@ html {
 .daily-set-card:hover,
 .booking-cta-card:hover,
 .cart-window:hover,
-.booking-window:hover {
+.booking-window:hover
+.dish-window:hover {
   border-color: #6aff8f;
   box-shadow:
     0 0 12px rgba(106, 255, 143, 0.4),
@@ -1102,5 +1104,187 @@ html {
 
   .promo-content {
     padding: 24px;
+  }
+}
+/* ===== DISH MODAL ===== */
+
+.dish-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 3000;
+}
+
+.dish-modal.active {
+  display: flex;
+}
+
+.dish-window {
+  background: #161617;
+  border-radius: 14px;
+  padding: 28px;
+
+  width: 92%;
+  max-width: 520px;
+
+  border: 1px solid #222;
+
+  position: relative;
+  animation: modalFade 0.25s ease;
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dish-image {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+.dish-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+
+  background: none;
+  border: none;
+
+  font-size: 26px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.dish-close:hover {
+  color: #6aff8f;
+}
+.dish-window {
+
+  background: #161617;
+
+  border-radius: 14px;
+  padding: 28px;
+
+  width: 92%;
+  max-width: 520px;
+
+  border: 1px solid #222;
+
+  position: relative;
+
+  animation: modalFade 0.25s ease;
+
+  transition: all 0.3s ease;
+
+}
+
+/* НЕОНОВОЕ СВЕЧЕНИЕ */
+
+.dish-window:hover {
+
+  border-color: #6aff8f;
+
+  box-shadow:
+    0 0 12px rgba(106, 255, 143, 0.45),
+    0 0 28px rgba(106, 255, 143, 0.25),
+    0 0 60px rgba(106, 255, 143, 0.15);
+
+}
+/* ===== EMPLOYEE OF THE MONTH ===== */
+
+.employee {
+  max-width: 1100px;
+  margin: 80px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.employee-title {
+  font-size: 36px;
+  font-weight: 500;
+  margin-bottom: 40px;
+}
+
+.employee-card {
+  background: #161617;
+  border-radius: 16px;
+  border: 1px solid #222;
+
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 40px;
+
+  padding: 40px;
+  align-items: center;
+
+  transition: 0.3s ease;
+}
+
+.employee-card:hover {
+  transform: translateY(-6px);
+  border-color: #6aff8f;
+  box-shadow:
+    0 0 20px rgba(106,255,143,0.25);
+}
+
+.employee-image {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.employee-content {
+  text-align: left;
+}
+
+.employee-name {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.employee-role {
+  color: #6aff8f;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.employee-description {
+  color: #aaa;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.employee-badge {
+  display: inline-block;
+  background: rgba(106,255,143,0.15);
+  border: 1px solid #6aff8f;
+  color: #6aff8f;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .employee-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .employee-content {
+    text-align: center;
   }
 }
