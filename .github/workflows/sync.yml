@@ -1,0 +1,33 @@
+name: Sync to Hugging Face
+on:
+  push:
+    branches: [main, dev]
+  workflow_dispatch:
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Install Git LFS
+        run: |
+          git lfs install
+          git lfs pull # Гарантирует, что все LFS объекты выкачаны
+
+      - name: Push to HF
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          CURRENT_BRANCH=${GITHUB_REF_NAME}
+
+          # Настройка данных пользователя для Git
+          git config --global user.email "bot@github.com"
+          git config --global user.name "GitHub Action"
+
+          # Пушим ветку в репозиторий Hugging Face
+          git push --force https://robot:$HF_TOKEN@huggingface.co/spaces/qwefsdfsdsg/mdk ${CURRENT_BRANCH}:${CURRENT_BRANCH}
