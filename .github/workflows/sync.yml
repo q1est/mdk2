@@ -1,21 +1,38 @@
-- name: Push to Hugging Face (clean)
-  env:
-    HF_TOKEN: ${{ secrets.HF_TOKEN }}
-  run: |
-    set -e
+name: Sync to Hugging Face
 
-    CURRENT_BRANCH=${GITHUB_REF_NAME}
+on:
+  push:
+    branches: [main, dev]
+  workflow_dispatch:
 
-    git config --global user.email "bot@github.com"
-    git config --global user.name "GitHub Action"
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
 
-    # удаляем картинки
-    find . -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) -delete
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    # создаём чистую ветку БЕЗ истории
-    git checkout --orphan clean-branch
-    git add .
-    git commit -m "clean commit (no images)"
+      - name: Push to Hugging Face (clean)
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          set -e
 
-    # пушим как нужную ветку
-    git push --force https://robot:$HF_TOKEN@huggingface.co/spaces/qwefsdfsdsg/mdk clean-branch:${CURRENT_BRANCH}
+          CURRENT_BRANCH=${GITHUB_REF_NAME}
+
+          git config --global user.email "bot@github.com"
+          git config --global user.name "GitHub Action"
+
+          # удаляем картинки
+          find . -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) -delete
+
+          # создаём чистую ветку без истории
+          git checkout --orphan clean-branch
+          git add .
+          git commit -m "clean commit"
+
+          # пуш
+          git push --force https://robot:$HF_TOKEN@huggingface.co/spaces/qwefsdfsdsg/mdk clean-branch:${CURRENT_BRANCH}
