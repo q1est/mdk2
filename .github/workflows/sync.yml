@@ -1,24 +1,36 @@
 name: Sync to Hugging Face
+
 on:
   push:
-    branches: [main, dev] 
-  workflow_dispatch: 
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   sync-to-hub:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          lfs: true
 
-      - name: Push to HF
+      - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-        
-          CURRENT_BRANCH=${GITHUB_REF_NAME}
-          
-      
-          git push --force https://robot:$HF_TOKEN@huggingface.co/spaces/qwefsdfsdsg/mdk ${CURRENT_BRANCH}:${CURRENT_BRANCH}
+          set -e
+
+          git config --global user.email "bot@github.com"
+          git config --global user.name "GitHub Action"
+
+          # (опционально) удаляем файлы
+          find . -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) -delete
+
+          # чистая ветка
+          git checkout --orphan clean-branch
+          git add .
+          git commit -m "sync"
+
+          # ВСЕГДА пушим в main HF Space
+          git push --force https://robot:$HF_TOKEN@huggingface.co/spaces/qwefsdfsdsg/mdk clean-branch:main
