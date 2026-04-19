@@ -1,4 +1,5 @@
 name: Sync to Hugging Face
+
 on:
   push:
     branches: [main, dev]
@@ -7,27 +8,31 @@ on:
 jobs:
   sync-to-hub:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          lfs: true
 
-      - name: Install Git LFS
+      - name: Remove images for HF
         run: |
-          git lfs install
-          git lfs pull # Гарантирует, что все LFS объекты выкачаны
+          find . -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) -delete
 
-      - name: Push to HF
+      - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          set -e
+
           CURRENT_BRANCH=${GITHUB_REF_NAME}
 
-          # Настройка данных пользователя для Git
           git config --global user.email "bot@github.com"
           git config --global user.name "GitHub Action"
 
-          # Пушим ветку в репозиторий Hugging Face
-          git push --force https://robot:$HF_TOKEN@huggingface.co/spaces/qwefsdfsdsg/mdk ${CURRENT_BRANCH}:${CURRENT_BRANCH}
+          git remote add hf https://robot:$HF_TOKEN@huggingface.co/spaces/qwefsdfsdsg/mdk || true
+
+          git add .
+          git commit -m "sync without images" || echo "No changes to commit"
+
+          git push hf ${CURRENT_BRANCH}
