@@ -32,13 +32,13 @@ func ConnectDBOrder() {
 
 func createTableOrder(ctx context.Context) {
 	query := `
-	CREATE TABLE IF NOT EXISTS orders (	 
+	CREATE TABLE IF NOT EXISTS orders (
 	id SERIAL PRIMARY KEY,
 		name TEXT NOT NULL,
 		phone TEXT NOT NULL,
 		address TEXT NOT NULL,
 		telegram TEXT NOT NULL,
-		items JSONB NOT NULL, 
+		items JSONB NOT NULL,
 		qty INT NOT NULL,
 		total INT NOT NULL,
 		created_at TIMESTAMP DEFAULT NOW()
