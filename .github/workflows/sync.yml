@@ -6,14 +6,29 @@ on:
   workflow_dispatch:
 
 jobs:
-  sync-to-hub:
+  sync:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Prepare clean deploy directory
+        run: |
+          set -e
+
+          rm -rf deploy
+          mkdir deploy
+
+          # копируем только backend в корень deploy
+          cp -r back/* deploy/
+
+          # (если есть Dockerfile в back)
+          if [ -f back/Dockerfile ]; then
+            cp back/Dockerfile deploy/Dockerfile
+          fi
 
       - name: Push to Hugging Face
         env:
@@ -24,13 +39,14 @@ jobs:
           git config --global user.email "bot@github.com"
           git config --global user.name "GitHub Action"
 
-          # (опционально) удаляем файлы
-          find . -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) -delete
+          cd deploy
 
-          # чистая ветка
-          git checkout --orphan clean-branch
+          git init
           git add .
-          git commit -m "sync"
+          git commit -m "deploy"
 
-          # ВСЕГДА пушим в main HF Space
-          git push --force https://robot:$HF_TOKEN@huggingface.co/spaces/qwefsdfsdsg/mdk clean-branch:main
+          git branch -M main
+
+          git remote add hf https://robot:$HF_TOKEN@huggingface.co/spaces/qwefsdfsdsg/mdk
+
+          git push --force hf main
