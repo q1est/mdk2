@@ -34,17 +34,5 @@ jobs:
           git add .
           git commit -m "clean commit"
 
-          # выбираем Space
-          if [ "$CURRENT_BRANCH" = "main" ]; then
-            HF_SPACE="qwefsdfsdsg/mdk"
-          elif [ "$CURRENT_BRANCH" = "dev" ]; then
-            HF_SPACE="qwefsdfsdsg/mdk-dev"
-          else
-            echo "Unknown branch"
-            exit 1
-          fi
-
-          echo "Pushing to $HF_SPACE"
-
-          # ВСЕГДА пушим в main Space
-          git push --force https://robot:$HF_TOKEN@huggingface.co/spaces/$HF_SPACE clean-branch:main
+          # пуш
+          git push --force https://robot:$HF_TOKEN@huggingface.co/spaces/qwefsdfsdsg/mdk clean-branch:${CURRENT_BRANCH}
