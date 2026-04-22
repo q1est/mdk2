@@ -500,14 +500,38 @@ document.querySelectorAll(".item").forEach(item => {
 
 });
 
-// кнопка закрытия
-closeDish.onclick = () => {
-  dishModal.classList.remove("active");
-};
-
-// клик вне окна закрывает modal
-dishModal.addEventListener("click", (e) => {
-  if (e.target === dishModal) {
+if (closeDish && dishModal) {
+  closeDish.onclick = () => {
     dishModal.classList.remove("active");
-  }
-});
+  };
+
+  dishModal.addEventListener("click", (e) => {
+    if (e.target === dishModal) {
+      dishModal.classList.remove("active");
+    }
+  });
+}
+// ===== CONSENT =====
+const consentModal = document.getElementById("consentModal");
+const acceptBtn = document.getElementById("acceptConsent");
+const declineBtn = document.getElementById("declineConsent");
+
+// проверяем, давал ли пользователь согласие
+if (!localStorage.getItem("consentAccepted")) {
+  consentModal.classList.add("active");
+}
+
+// нажал "Принять"
+if (acceptBtn) {
+  acceptBtn.onclick = () => {
+    localStorage.setItem("consentAccepted", "true");
+    consentModal.classList.remove("active");
+  };
+}
+
+// нажал "Выйти"
+if (declineBtn) {
+  declineBtn.onclick = () => {
+    window.location.href = "https://google.com"; // или любая страница выхода
+  };
+}

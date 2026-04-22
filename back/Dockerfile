@@ -1,27 +1,33 @@
+# ЭТАП 1: Сборка (Builder)
+FROM golang:1.24-alpine AS builder
 
-FROM golang:1.26-alpine AS builder
-
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# зависимости (УЖЕ В back/)
-COPY go.mod go.sum ./
+# Копируем файлы зависимостей (поддерживает сборку из корня репозитория)
+COPY back/go.mod back/go.sum ./
 RUN go mod download
 
-# исходники (УЖЕ в back/)
-COPY . .
+# Копируем исходный код (копируем содержимое папки back в рабочую директорию)
+COPY back/ ./
 
+# Собираем бинарный файл (статический, для работы в минимальном образе)
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
-# ЭТАП 2: Runner
+# ЭТАП 2: Финальный образ (Runner)
 FROM alpine:latest
 
+# Добавляем сертификаты (обязательно для работы с Neon через SSL)
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
 
+# Копируем только исполняемый файл из первого этапа
 COPY --from=builder /app/main .
 
+# Hugging Face требует порт 7860
 ENV PORT=7860
 EXPOSE 7860
 
+# Запускаем приложение
 CMD ["./main"]

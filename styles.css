@@ -1288,3 +1288,56 @@ html {
     text-align: center;
   }
 }
+/* ===== CONSENT MODAL ===== */
+.consent-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.consent-modal.active {
+  display: flex;
+}
+
+.consent-window {
+  background: #161617;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 500px;
+  text-align: center;
+  border: 1px solid #222;
+}
+
+.consent-window h2 {
+  margin-bottom: 15px;
+}
+
+.consent-window p {
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+.consent-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.consent-accept {
+  background: #6aff8f;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.consent-decline {
+  background: #333;
+  color: #aaa;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
