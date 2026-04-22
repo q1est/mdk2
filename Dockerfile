@@ -1,7 +1,6 @@
 # ЭТАП 1: Сборка (Builder)
 FROM golang:1.24-alpine AS builder
-ENV GOTOOLCHAIN=auto 
-
+ENV GOTOOLCHAIN=auto
 # Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
 
