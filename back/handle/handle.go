@@ -13,7 +13,7 @@ import (
 )
 
 func OrdersHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io/mdk2/menu.htm")
+	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 
@@ -62,7 +62,7 @@ func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io/mdk2/index.html")
+	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 
