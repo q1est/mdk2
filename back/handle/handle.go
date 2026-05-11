@@ -36,7 +36,7 @@ func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
+	log.Println("data received", order)
 	ItemsJSON, err := json.Marshal(order.Items)
 	if err != nil {
 		http.Error(w, "Internal Server Error: JSON marshalling failed", http.StatusInternalServerError)
@@ -84,12 +84,12 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
+	log.Println("data received",res)
 	_, err := db.Pool.Exec(ctx,
 		`INSERT INTO reservations (name, phone, date, time, guests) VALUES ($1,$2,$3,$4,$5)`,
 		res.Name, res.Phone, res.Date, res.Time, res.Guests,
 	)
-	log.Println("данные отправлены")
+	log.Println("reservation сработал ")
 	if err != nil {
 		log.Println("DB Insert error:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
