@@ -39,7 +39,7 @@ func createTableOrder(ctx context.Context) {
 		address TEXT NOT NULL,
 		telegram TEXT NOT NULL,
 		items JSONB NOT NULL,
-		qty ,
+		qty INT,
 		total INT NOT NULL,
 		created_at TIMESTAMP DEFAULT NOW()
 
