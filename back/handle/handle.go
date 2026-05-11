@@ -1,19 +1,19 @@
 package handle
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"restaurant/db"
+	"restaurant/tg"
+
 	"restaurant/models"
 )
 
+
 func OrdersHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io")
+	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io/mdk2/menu.htm")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 
@@ -53,16 +53,15 @@ func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	// ✅ уведомление в Telegram
-	go notifyTelegram(order)
+	log.Println("order сработал")
+	go tg.NotifyTelegramOrder(order)
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 }
 
 func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io")
+	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io/mdk2/index.html")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 
@@ -90,7 +89,7 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 		`INSERT INTO reservations (name, phone, date, time, guests) VALUES ($1,$2,$3,$4,$5)`,
 		res.Name, res.Phone, res.Date, res.Time, res.Guests,
 	)
-
+	log.Println("данные отправлены")
 	if err != nil {
 		log.Println("DB Insert error:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -99,54 +98,4 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
-}
-
-func notifyTelegram(order models.Order) {
-	token := os.Getenv("BOT_TOKEN")
-	if token == "" {
-		log.Println("BOT_TOKEN not set")
-		return
-	}
-
-	chatID := os.Getenv("CHAT_ID")
-	if chatID == "" {
-		log.Println("CHAT_ID not set")
-		return
-	}
-
-	text := fmt.Sprintf(
-		"🆕 Новый заказ\n\n"+
-			"👤 %s\n"+
-			"📞 %s\n"+
-			"🏠 %s\n\n"+
-			"🍽 Блюда:\n",
-		order.Name,
-		order.Phone,
-		order.Address,
-	)
-
-	for _, item := range order.Items {
-		text += fmt.Sprintf("• %s x%d\n", item.Name, item.Qty)
-	}
-
-	text += fmt.Sprintf("\n💰 Итого: %d₽", order.Total)
-
-	body := map[string]interface{}{
-		"chat_id": chatID,
-		"text":    text,
-	}
-
-	jsonBody, _ := json.Marshal(body)
-
-	resp, err := http.Post(
-		"https://api.telegram.org/bot"+token+"/sendMessage",
-		"application/json",
-		bytes.NewBuffer(jsonBody),
-	)
-
-	if err != nil {
-		log.Println("Telegram error:", err)
-		return
-	}
-	defer resp.Body.Close()
 }
