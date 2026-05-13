@@ -9,11 +9,9 @@ import (
 )
 
 func main() {
-	db.ConnectDBOrder()
-	defer db.PoolOrder.Close()
 	db.ConnectPostgres()
 	defer db.Pool.Close()
-
+	
 
 	http.HandleFunc("/api/orders", handle.OrdersHandler) 
 	

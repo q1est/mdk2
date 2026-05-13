@@ -1,52 +1,52 @@
 package db
 
-import (
-	"context"
-	"log"
-	"os"
+// import (
+// 	"context"
+// 	"log"
+// 	"os"
 
-	"github.com/jackc/pgx/v5/pgxpool"
-)
+// 	"github.com/jackc/pgx/v5/pgxpool"
+// )
 
-var PoolOrder *pgxpool.Pool
+// var PoolOrder *pgxpool.Pool
 
-func ConnectDBOrder() {
-	ctx := context.Background()
-	databaseURL := os.Getenv("DATABASE_URL")
-	if databaseURL == "" {
-		log.Fatal("DATABASE_URL is not set!")
-	}
+// func ConnectDBOrder() {
+// 	ctx := context.Background()
+// 	databaseURL := os.Getenv("DATABASE_URL")
+// 	if databaseURL == "" {
+// 		log.Fatal("DATABASE_URL is not set!")
+// 	}
 
-	var err error
-	PoolOrder, err = pgxpool.New(ctx, databaseURL)
-	if err != nil {
-		log.Fatal("Unable to connect to database:", err)
-	}
+// 	var err error
+// 	PoolOrder, err = pgxpool.New(ctx, databaseURL)
+// 	if err != nil {
+// 		log.Fatal("Unable to connect to database:", err)
+// 	}
 
-	if err = PoolOrder.Ping(ctx); err != nil {
-		log.Fatal("DB not reachable:", err)
-	}
+// 	if err = PoolOrder.Ping(ctx); err != nil {
+// 		log.Fatal("DB not reachable:", err)
+// 	}
 
-	createTableOrder(ctx)
-}
+// 	createTableOrder(ctx)
+// }
 
-func createTableOrder(ctx context.Context) {
-	query := `
-	CREATE TABLE IF NOT EXISTS orders (
-	id SERIAL PRIMARY KEY,
-		name TEXT NOT NULL,
-		phone TEXT NOT NULL,
-		address TEXT NOT NULL,
-		telegram TEXT NOT NULL,
-		items JSONB NOT NULL,
-		qty INT,
-		total INT NOT NULL,
-		created_at TIMESTAMP DEFAULT NOW()
+// func createTableOrder(ctx context.Context) {
+// 	query := `
+// 	CREATE TABLE IF NOT EXISTS orders (
+// 	id SERIAL PRIMARY KEY,
+// 		name TEXT NOT NULL,
+// 		phone TEXT NOT NULL,
+// 		address TEXT NOT NULL,
+// 		telegram TEXT NOT NULL,
+// 		items JSONB NOT NULL,
+// 		qty INT,
+// 		total INT NOT NULL,
+// 		created_at TIMESTAMP DEFAULT NOW()
 
-);`
-	_, err := PoolOrder.Exec(ctx, query)
-	if err != nil {
-		log.Fatal("Failed to create table:", err)
-	}
+// );`
+// 	_, err := PoolOrder.Exec(ctx, query)
+// 	if err != nil {
+// 		log.Fatal("Failed to create table:", err)
+// 	}
 
-}
+// }

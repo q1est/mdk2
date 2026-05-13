@@ -43,7 +43,7 @@ func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = db.PoolOrder.Exec(ctx,
+	_, err = db.Pool.Exec(ctx,
 		`INSERT INTO orders (name, phone, address, telegram, items, total) VALUES ($1,$2,$3,$4,$5,$6)`,
 		order.Name, order.Phone, order.Address, order.Telegram, ItemsJSON, order.Total,
 	)
@@ -89,13 +89,13 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 		`INSERT INTO reservations (name, phone, date, time, guests) VALUES ($1,$2,$3,$4,$5)`,
 		res.Name, res.Phone, res.Date, res.Time, res.Guests,
 	)
-	log.Println("reservation сработал ")
+	
 	if err != nil {
 		log.Println("DB Insert error:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
+log.Println("reservation сработал ")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 }
