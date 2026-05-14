@@ -6,23 +6,28 @@ import (
 	"os"
 	"restaurant/db"
 	"restaurant/handle"
+	"restaurant/logs"
 )
 
-func main() {
+func main() { 
+	logs.Log()
 	db.ConnectPostgres()
 	defer db.Pool.Close()
 	
-
-	http.HandleFunc("/api/orders", handle.OrdersHandler) 
+mux := http.NewServeMux()
+	mux.HandleFunc("/api/orders", handle.OrdersHandler) 
 	
-	http.HandleFunc("/api/reservations", handle.ReservationsHandler)
+	mux.HandleFunc("/api/reservations", handle.ReservationsHandler) 
+	logmux := logs.LogMiddleware(mux)
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "7860"
 	}
 
-	log.Println("Server started on :" + port)
+	log.Println("Server started on :" + port, )
 
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	//log.Fatal(http.ListenAndServe(":"+port,logmux, nil, )) 
+	http.ListenAndServe(""+port, logmux) 
+
 }

@@ -16,7 +16,8 @@ func ConnectPostgres() {
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
 		log.Fatal("DATABASE_URL is not set!")
-	}
+	} 
+	log.Println("set url")
 
 	var err error
 	Pool, err = pgxpool.New(ctx, databaseURL)
@@ -26,7 +27,8 @@ func ConnectPostgres() {
 
 	if err = Pool.Ping(ctx); err != nil {
 		log.Fatal("DB not reachable:", err)
-	}
+	} 
+	log.Println("DB connected successfully")
 
 	CreateTables(ctx)
 }

@@ -39,5 +39,6 @@ func CreateTables(ctx context.Context) {
 	_, err = Pool.Exec(ctx, ordersQuery)
 	if err != nil {
 		log.Fatal("Failed to create orders table:", err)
-	}
+	} 
+	log.Println("Tables created successfully")
 }
