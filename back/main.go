@@ -27,7 +27,7 @@ func main() {
 
 	log.Println("Server started on :" + port, )
 
-	//log.Fatal(http.ListenAndServe(":"+port,logmux, nil, )) 
-	http.ListenAndServe(""+port,nil) 
+	log.Fatal(http.ListenAndServe(":"+port, nil, )) 
+	//http.ListenAndServe(""+port,nil) 
 
 }
