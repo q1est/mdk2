@@ -14,11 +14,11 @@ func main() {
 	db.ConnectPostgres()
 	defer db.Pool.Close()
 	
-mux := http.NewServeMux()
-	mux.HandleFunc("/api/orders", handle.OrdersHandler) 
+//mux := http.NewServeMux()
+	http.HandleFunc("/api/orders", handle.OrdersHandler) 
 	
-	mux.HandleFunc("/api/reservations", handle.ReservationsHandler) 
-	logmux := logs.LogMiddleware(mux)
+	http.HandleFunc("/api/reservations", handle.ReservationsHandler) 
+	//logmux := logs.LogMiddleware()
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -28,6 +28,6 @@ mux := http.NewServeMux()
 	log.Println("Server started on :" + port, )
 
 	//log.Fatal(http.ListenAndServe(":"+port,logmux, nil, )) 
-	http.ListenAndServe(""+port, logmux) 
+	http.ListenAndServe(""+port,nil) 
 
 }
