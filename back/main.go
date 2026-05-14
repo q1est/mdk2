@@ -6,11 +6,11 @@ import (
 	"os"
 	"restaurant/db"
 	"restaurant/handle"
-	"restaurant/logs"
+//	"restaurant/logs"
 )
 
 func main() { 
-	logs.Log()
+	//logs.Log()
 	db.ConnectPostgres()
 	defer db.Pool.Close()
 	
