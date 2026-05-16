@@ -14,13 +14,13 @@ import (
 func NotifyTelegramOrder(order models.Order) {
 	token := os.Getenv("BOT_TOKEN")
 	if token == "" {
-		log.Println("BOT_TOKEN not set")
+		log.Println("[WARN] BOT_TOKEN not set")
 		return
 	}
 
 	chatID := os.Getenv("CHAT_ID")
 	if chatID == "" {
-		log.Println("CHAT_ID not set")
+		log.Println("[WARN]CHAT_ID not set")
 		return
 	}
 
@@ -55,9 +55,9 @@ func NotifyTelegramOrder(order models.Order) {
 	)
 
 	if err != nil {
-		log.Println("Telegram error:", err)
+		log.Println("[WARN]Telegram error:", err)
 		return
 	} 
-	log.Println("tg bot")
+	log.Println("[LOG]tg bot work")
 	defer resp.Body.Close()
 }

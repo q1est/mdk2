@@ -20,7 +20,7 @@ func CreateTables(ctx context.Context) {
 
 	_, err := Pool.Exec(ctx, reservationsQuery)
 	if err != nil {
-		log.Fatal("Failed to create reservations table:", err)
+		log.Fatal("[ERROR] Failed to create reservations table:", err)
 	}
 
 	ordersQuery := `
@@ -38,7 +38,7 @@ func CreateTables(ctx context.Context) {
 
 	_, err = Pool.Exec(ctx, ordersQuery)
 	if err != nil {
-		log.Fatal("Failed to create orders table:", err)
+		log.Fatal("[ERROR]Failed to create orders table:", err)
 	} 
-	log.Println("Tables created successfully")
+	log.Println("[LOG] Tables created successfully")
 }

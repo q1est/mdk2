@@ -11,12 +11,12 @@ import (
 func Log() {
 	err := os.Mkdir("backend_logs", os.ModePerm)
 	if err != nil {
-		log.Fatal(err)
+		log.Println("[WARN]not dir log",err)
 
 	}
 	logFile, err := os.OpenFile("backend_logs/log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
-		log.Fatal(err)
+		log.Println("[WARN]didn't open file ",err)
 	}
 	multiwriter := io.MultiWriter(os.Stdout, logFile)
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)

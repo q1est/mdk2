@@ -22,13 +22,14 @@ mux := http.NewServeMux()
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "7860"
+		port = "7860" 
+		log.Println("[WARN], not get port, default port 7860")
 	}
 
 	log.Println("Server started on :" + port, )
 	err := http.ListenAndServe(":"+port, logmux)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("[ERROR] not start",err)
 	} 
 	
 //	log.Fatal(http.ListenAndServe(":"+port, nil, )) 

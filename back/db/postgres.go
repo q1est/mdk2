@@ -15,20 +15,20 @@ func ConnectPostgres() {
 
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
-		log.Fatal("DATABASE_URL is not set!")
+		log.Fatal("[ERROR] DATABASE_URL is not set!")
 	} 
-	log.Println("set url")
+	log.Println("[LOG] set url")
 
 	var err error
 	Pool, err = pgxpool.New(ctx, databaseURL)
 	if err != nil {
-		log.Fatal("Unable to connect to database:", err)
+		log.Fatal("[ERROR] Unable to connect to database:", err)
 	}
 
 	if err = Pool.Ping(ctx); err != nil {
-		log.Fatal("DB not reachable:", err)
+		log.Println("[ERROR] DB not reachable:", err)
 	} 
-	log.Println("DB connected successfully")
+	log.Println("[LOG] DB connected successfully")
 
 	CreateTables(ctx)
 }
