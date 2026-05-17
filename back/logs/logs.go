@@ -94,7 +94,7 @@ func NewLokiWriter() *LokiWriter {
 		return nil
 	}
 	return &LokiWriter{
-		URL:        url + "/loki/api/v1/push",
+		URL:url,
 		HTTPClient: &http.Client{Timeout: 5 * time.Second},
 		Labels: map[string]string{
 			"app": "go-backend",
