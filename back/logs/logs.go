@@ -24,15 +24,15 @@ func Log() {
 		log.Println("[WARN]didn't open file ", err)
 	}
 
-	// Инициализируем наш клиент Loki
+	
 	loki := NewLokiWriter()
 
 	var multiwriter io.Writer
 	if loki != nil {
-		// Если URL есть, пишем в консоль, файл И отправляем в Loki
+		
 		multiwriter = io.MultiWriter(os.Stdout, logFile, loki)
 	} else {
-		// Если URL нет (локально), пишем только в консоль и файл
+
 		multiwriter = io.MultiWriter(os.Stdout, logFile)
 	}
 
@@ -104,13 +104,12 @@ func NewLokiWriter() *LokiWriter {
 }
 
 func (l *LokiWriter) Write(p []byte) (n int, err error) {
-	// Возвращаем длину, чтобы стандартный логгер думал, что всё успешно записано
+	
 	n = len(p)
 
-	// Очищаем строку от лишних переносов для корректного отображения в Grafana
+	
 	message := string(bytes.TrimSpace(p))
 
-	// Отправляем в фоне (goroutine), чтобы сетевые задержки Loki не тормозили бэкенд
 	go func(msg string) {
 		nowNano := fmt.Sprintf("%d", time.Now().UnixNano())
 
