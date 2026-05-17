@@ -1,5 +1,6 @@
-# MDK2 - Сервис заказа блюд
-
+# MDK2 - Сервис заказа блюд 
+**Ссылка на проект**
+https://q1est.github.io/mdk2/
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Language](https://img.shields.io/badge/frontend-HTML5%20%7C%20CSS3%20%7C%20JS-blue)
 ![Language](https://img.shields.io/badge/backend-Go-00ADD8)
