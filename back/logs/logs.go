@@ -90,7 +90,7 @@ type LokiWriter struct {
 func NewLokiWriter() *LokiWriter {
 	url := os.Getenv("LOKI_URL")
 	if url == "" {
-		// Если URL не задан, логи в Loki не пойдут, но приложение не упадет
+	log.Println("err set link Loki")
 		return nil
 	}
 	return &LokiWriter{
@@ -131,16 +131,23 @@ func (l *LokiWriter) Write(p []byte) (n int, err error) {
 		}
 
 		req, err := http.NewRequest("POST", l.URL, bytes.NewBuffer(body))
-		if err != nil {
+		if err != nil { 
+				fmt.Printf("[LOKI-ERROR] Failed to send log: %v\n", err)
 			return
-		}
+		} 
+	
 		req.Header.Set("Content-Type", "application/json")
 
 		resp, err := l.HTTPClient.Do(req)
 		if err != nil {
 			return
 		}
-		defer resp.Body.Close()
+		defer resp.Body.Close() 
+		if resp.StatusCode != http.StatusNoContent && resp.StatusCode != http.StatusOK {
+			var buf bytes.Buffer
+			buf.ReadFrom(resp.Body)
+			fmt.Printf("[LOKI-ERROR] Bad status %d: %s\n", resp.StatusCode, buf.String())
+		}
 	}(message)
 
 	return n, nil
