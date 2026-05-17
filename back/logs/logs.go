@@ -80,7 +80,7 @@ type LokiPushRequest struct {
 	Streams []LokiStream `json:"streams"`
 }
 
-// LokiWriter реализует io.Writer для прямой отправки в Loki
+
 type LokiWriter struct {
 	URL        string
 	HTTPClient *http.Client
