@@ -89,13 +89,6 @@ Frontend (HTML/CSS/JavaScript)
 
 Структура проекта
 
-mdk2
-├── front/          # Клиентская часть
-├── back/           # Серверная часть на Go
-├── db/             # Скрипты и данные БД
-├── docker/         # Docker-конфигурация
-├── architectury/   # Диаграммы и схемы
-└── docs/           # Документация
 
 ⸻
 
@@ -126,7 +119,7 @@ Content-Type: application/json
 Пример тела запроса:
 
 {
-  "customerName": "Макар",
+  "customerName": "Deko",
   "phone": "+79999999999",
   "items": [
     {
