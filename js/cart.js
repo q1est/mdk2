@@ -1,27 +1,54 @@
-import { prices } from "./data.js";
-
 export const cart = {};
 
 export function addToCart(item) {
-  cart[item] = (cart[item] || 0) + 1;
+
+    const id = item.id;
+
+    if (!cart[id]) {
+
+        cart[id] = {
+            ...item,
+            qty: 1,
+        };
+
+    } else {
+
+        cart[id].qty++;
+    }
 }
 
-export function removeFromCart(item) {
-  if (!cart[item]) return;
+export function removeFromCart(id) {
 
-  cart[item]--;
+    if (!cart[id]) return;
 
-  if (cart[item] <= 0) delete cart[item];
+    cart[id].qty--;
+
+    if (cart[id].qty <= 0) {
+        delete cart[id];
+    }
+}
+
+export function clearCart() {
+
+    Object.keys(cart).forEach(id => {
+        delete cart[id];
+    });
 }
 
 export function getCartData() {
-  let total = 0;
-  let count = 0;
 
-  Object.entries(cart).forEach(([item, qty]) => {
-    total += (prices[item] || 0) * qty;
-    count += qty;
-  });
+    let total = 0;
+    let count = 0;
 
-  return { total, count };
+    Object.values(cart).forEach(item => {
+
+        total += item.price * item.qty;
+
+        count += item.qty;
+    });
+
+    return {
+        total,
+        count,
+    };
 }

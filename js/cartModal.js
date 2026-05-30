@@ -1,47 +1,86 @@
-import { openModal, closeModal, bindOverlayClose } from "./modal.js";
-import { cart } from "./cart.js";
-import { updateCart } from "./cartUI.js";
+import {
+  openModal,
+  closeModal,
+  bindOverlayClose
+} from "./modal.js";
 
-console.log("cartModal loaded");
+import {
+  cart,
+  clearCart
+} from "./cart.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+import { updateCart }
+  from "./cartUI.js";
 
-  const cartBtn = document.getElementById("cartBtn");
-  const cartModal = document.getElementById("cartModal");
-  const closeCart = document.getElementById("closeCart");
-  const clearCartBtn = document.getElementById("clearCart");
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
 
-  console.log("cartBtn:", cartBtn);
-  console.log("cartModal:", cartModal);
+    const cartBtn =
+      document.getElementById("cartBtn");
 
-  if (cartBtn) {
-    cartBtn.addEventListener("click", () => {
-      console.log("OPEN MODAL CLICKED");
-      openModal(cartModal);
-    });
-  }
+    const cartModal =
+      document.getElementById("cartModal");
 
-  if (closeCart) {
-    closeCart.addEventListener("click", () => {
-      closeModal(cartModal);
-    });
-  }
+    const closeCart =
+      document.getElementById("closeCart");
 
-  bindOverlayClose(cartModal);
+    const clearCartBtn =
+      document.getElementById("clearCart");
 
-  if (clearCartBtn) {
-    clearCartBtn.addEventListener("click", () => {
+    if (cartBtn) {
 
-      if (Object.keys(cart).length === 0) {
-        alert("Корзина уже пуста ☢️");
-        return;
-      }
+      cartBtn.addEventListener(
+        "click",
+        () => {
 
-      if (confirm("Очистить корзину?")) {
-        Object.keys(cart).forEach(k => delete cart[k]);
-        updateCart();
-      }
-    });
-  }
+          updateCart();
 
+          openModal(cartModal);
+        }
+      );
+    }
+
+    if (closeCart) {
+
+      closeCart.addEventListener(
+        "click",
+        () => {
+          closeModal(cartModal);
+        }
+      );
+    }
+
+    bindOverlayClose(cartModal);
+
+    if (clearCartBtn) {
+
+      clearCartBtn.addEventListener(
+        "click",
+        () => {
+
+          if (
+            Object.keys(cart).length === 0
+          ) {
+
+            alert(
+              "Корзина уже пуста ☢️"
+            );
+
+            return;
+          }
+
+          if (
+            confirm(
+              "Очистить корзину?"
+            )
+          ) {
+
+            clearCart();
+
+            updateCart();
+          }
+        }
+      );
+    }
 });

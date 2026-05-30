@@ -1,97 +1,184 @@
-import { cart } from "./cart.js";
-import { prices } from "./data.js";
-import { updateCart } from "./cartUI.js";
+import {
+  cart,
+  clearCart,
+  getCartData
+} from "./cart.js";
 
-const form = document.getElementById("orderForm");
-const orderPhone = document.getElementById("orderPhone");
-const orderTelegram = document.getElementById("orderTelegram");
+import { updateCart }
+  from "./cartUI.js";
+
+const form =
+  document.getElementById("orderForm");
+
+const orderPhone =
+  document.getElementById("orderPhone");
+
+const orderTelegram =
+  document.getElementById("orderTelegram");
 
 if (orderPhone) {
-  orderPhone.addEventListener("input", (e) => {
-    e.target.value = e.target.value.replace(/\D/g, "").substring(0, 10);
-  });
+
+  orderPhone.addEventListener(
+    "input",
+    (e) => {
+
+      e.target.value =
+        e.target.value
+          .replace(/\D/g, "")
+          .substring(0, 10);
+    }
+  );
 }
 
 if (form) {
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
 
-    const name = document.getElementById("orderName").value;
-    const phone = orderPhone.value;
-    const address = document.getElementById("orderAddress").value;
-    const tg = orderTelegram.value.trim();
+  form.addEventListener(
+    "submit",
+    async (e) => {
 
-    if (phone.length !== 10) {
-      alert("⚠️ Номер телефона должен содержать 10 цифр! ⚠️");
-      return;
-    }
+      e.preventDefault();
 
-    if (!address.trim()) {
-      alert("⚠️ Укажите адрес доставки! ⚠️");
-      return;
-    }
+      if (
+        Object.keys(cart).length === 0
+      ) {
 
-    if (!tg.startsWith("@")) {
-      alert("⚠️ Telegram username должен начинаться с @ ⚠️");
-      return;
-    }
+        alert(
+          "⚠️ Корзина пуста ⚠️"
+        );
 
-    const items = Object.entries(cart)
-      .filter(([_, qty]) => qty > 0)
-      .map(([name, qty]) => ({
-        name,
-        qty
-      }));
+        return;
+      }
 
-    let total = 0;
+      const name =
+        document
+          .getElementById("orderName")
+          .value
+          .trim();
 
-    items.forEach((item) => {
-      total += (prices[item.name] || 0) * item.qty;
-    });
+      const phone =
+        orderPhone.value.trim();
 
-    try {
-      const response = await fetch(
-        "https://qwefsdfsdsg-mdk.hf.space/api/orders",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            name,
-            phone: "+7" + phone,
-            address,
-            telegram: tg,
-            items,
-            total
-          })
+      const address =
+        document
+          .getElementById("orderAddress")
+          .value
+          .trim();
+
+      const tg =
+        orderTelegram.value.trim();
+
+      if (phone.length !== 10) {
+
+        alert(
+          "⚠️ Номер телефона должен содержать 10 цифр ⚠️"
+        );
+
+        return;
+      }
+
+      if (!address) {
+
+        alert(
+          "⚠️ Укажите адрес доставки ⚠️"
+        );
+
+        return;
+      }
+
+      if (!tg.startsWith("@")) {
+
+        alert(
+          "⚠️ Telegram username должен начинаться с @ ⚠️"
+        );
+
+        return;
+      }
+
+      const items =
+        Object.values(cart).map(item => ({
+
+          id: item.id,
+
+          name: item.name,
+
+          qty: item.qty,
+
+          price: item.price
+        }));
+
+      const { total } =
+        getCartData();
+
+      try {
+
+        const response =
+          await fetch(
+            "/api/orders",
+            {
+
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+
+                name,
+
+                phone: "+7" + phone,
+
+                address,
+
+                telegram: tg,
+
+                items,
+
+                total
+              })
+            }
+          );
+
+        if (!response.ok) {
+          throw new Error(
+            "Ошибка сервера"
+          );
         }
-      );
 
-      if (!response.ok) {
-        throw new Error("Ошибка сервера");
+        alert(
+          "🚶‍♂️ Заказ оформлен! Сталкеры уже выдвинулись 🚶‍♂️"
+        );
+
+        clearCart();
+
+        updateCart();
+
+        form.reset();
+
+        const modal =
+          document.getElementById(
+            "orderModal"
+          );
+
+        if (modal) {
+
+          modal.classList.remove(
+            "active"
+          );
+
+          modal.style.display =
+            "none";
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "Ошибка при отправке заказа"
+        );
       }
-
-      alert("🚶‍♂️ Заказ оформлен! Сталкеры уже выдвинулись 🚶‍♂️");
-
-      Object.keys(cart).forEach((key) => {
-        delete cart[key];
-      });
-
-      updateCart();
-
-      form.reset();
-
-      const modal = document.getElementById("orderModal");
-
-      if (modal) {
-        modal.style.display = "none";
-        modal.classList.remove("active");
-      }
-
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка при отправке заказа");
     }
-  });
+  );
 }

@@ -1,61 +1,138 @@
-import { cart, addToCart, removeFromCart, getCartData } from "./cart.js";
-import { prices } from "./data.js";
+import {
+  cart,
+  addToCart,
+  removeFromCart,
+  getCartData
+} from "./cart.js";
 
-const cartList = document.getElementById("cartList");
-const cartCount = document.getElementById("cartCount");
-const totalPriceEl = document.getElementById("totalPrice");
+const cartList =
+  document.getElementById("cartList");
 
-document.querySelectorAll(".add-to-cart").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const title = btn.parentElement.querySelector("h3").textContent;
-    addToCart(title);
-    updateCart();
-  });
-});
+const cartCount =
+  document.getElementById("cartCount");
+
+const totalPriceEl =
+  document.getElementById("totalPrice");
 
 export function updateCart() {
-  if (!cartList) return;
 
-  cartList.innerHTML = "";
+    if (!cartList) return;
 
-  Object.entries(cart).forEach(([item, qty]) => {
-    const li = document.createElement("li");
+    cartList.innerHTML = "";
 
-    li.innerHTML = `
-      <span>${item}</span>
-      <div class="cart-controls">
-        <button class="minus" data-item="${item}">−</button>
-        <span>${qty}</span>
-        <button class="plus" data-item="${item}">+</button>
-      </div>
-      <span>${prices[item] * qty} ₽</span>
-    `;
+    Object.values(cart).forEach(item => {
 
-    cartList.appendChild(li);
-  });
+        const li =
+          document.createElement("li");
 
-  const { total, count } = getCartData();
+        li.className = "cart-item";
 
-  if (cartCount) cartCount.textContent = count;
-  if (totalPriceEl) totalPriceEl.textContent = total + " ₽";
+        li.innerHTML = `
 
-  bindControls();
+            <img
+              src="${item.image}"
+              class="cart-item-image"
+              alt="${item.name}"
+              loading="lazy"
+              onerror="this.src='fallback.webp'"
+            >
+
+            <div class="cart-item-info">
+
+                <h4>
+                  ${item.name}
+                </h4>
+
+                <span>
+                  ${item.price} ₽
+                </span>
+
+            </div>
+
+            <div class="cart-controls">
+
+                <button
+                  class="minus"
+                  data-id="${item.id}"
+                >
+                    −
+                </button>
+
+                <span class="cart-qty">
+                  ${item.qty}
+                </span>
+
+                <button
+                  class="plus"
+                  data-id="${item.id}"
+                >
+                    +
+                </button>
+
+            </div>
+
+        `;
+
+        cartList.appendChild(li);
+    });
+
+    const { total, count } =
+      getCartData();
+
+    if (cartCount) {
+
+        cartCount.textContent =
+          count;
+    }
+
+    if (totalPriceEl) {
+
+        totalPriceEl.textContent =
+          total + " ₽";
+    }
 }
 
-function bindControls() {
-  document.querySelectorAll(".plus").forEach(btn => {
-    btn.onclick = () => {
-      addToCart(btn.dataset.item);
-      updateCart();
-    };
-  });
+document.addEventListener(
+  "click",
+  (e) => {
 
-  document.querySelectorAll(".minus").forEach(btn => {
-    btn.onclick = () => {
-      removeFromCart(btn.dataset.item);
-      updateCart();
-    };
-  });
-}
+    const plusBtn =
+      e.target.closest(".plus");
+
+    const minusBtn =
+      e.target.closest(".minus");
+
+    if (plusBtn) {
+
+        const id =
+          Number(
+            plusBtn.dataset.id
+          );
+
+        const item =
+          cart[id];
+
+        if (!item) return;
+
+        addToCart(item);
+
+        updateCart();
+
+        return;
+    }
+
+    if (minusBtn) {
+
+        const id =
+          Number(
+            minusBtn.dataset.id
+          );
+
+        removeFromCart(id);
+
+        updateCart();
+    }
+  }
+);
 
 updateCart();

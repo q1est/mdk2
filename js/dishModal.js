@@ -1,39 +1,54 @@
-import { recipes, dishImages } from "./data.js";
-import { openModal, closeModal, bindOverlayClose } from "./modal.js";
+const modal =
+  document.getElementById("dishModal");
 
-document.addEventListener("DOMContentLoaded", () => {
+const dishImage =
+  document.getElementById("dishImage");
 
-  const dishModal = document.getElementById("dishModal");
-  const dishTitle = document.getElementById("dishTitle");
-  const dishRecipe = document.getElementById("dishRecipe");
-  const dishImage = document.getElementById("dishImage");
-  const closeDish = document.getElementById("closeDish");
+const dishTitle =
+  document.getElementById("dishTitle");
 
-  // открытие карточки блюда
-  document.querySelectorAll(".item").forEach(item => {
-    item.addEventListener("click", e => {
+const dishRecipe =
+  document.getElementById("dishRecipe");
 
-      // чтобы кнопка "в корзину" не открывала модалку
-      if (e.target.classList.contains("add-to-cart")) return;
+const closeDish =
+  document.getElementById("closeDish");
 
-      const title = item.querySelector("h3").textContent;
+// ❗ если нет DOM — просто НЕ вешаем события
+if (
+  modal &&
+  dishImage &&
+  dishTitle &&
+  dishRecipe &&
+  closeDish
+) {
 
-      dishTitle.textContent = title;
-      dishRecipe.textContent = recipes[title] || "";
-      dishImage.src = dishImages[title] || "";
+  document.addEventListener("click", (e) => {
 
-      openModal(dishModal);
-    });
+    const item = e.target.closest(".item");
+    if (!item) return;
+
+    if (e.target.classList.contains("add-to-cart")) return;
+
+    const image = item.querySelector(".item-image");
+    const title = item.querySelector("h3");
+    const recipe = item.querySelector("p");
+
+    if (!image || !title || !recipe) return;
+
+    dishImage.src = image.src;
+    dishTitle.textContent = title.textContent;
+    dishRecipe.textContent = recipe.textContent;
+
+    modal.classList.add("active");
   });
 
-  // закрытие по кнопке
-  if (closeDish) {
-    closeDish.addEventListener("click", () => {
-      closeModal(dishModal);
-    });
-  }
+  closeDish.addEventListener("click", () => {
+    modal.classList.remove("active");
+  });
 
-  // закрытие по клику вне
-  bindOverlayClose(dishModal);
-
-});
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.classList.remove("active");
+    }
+  });
+}

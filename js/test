@@ -1,0 +1,159 @@
+/**
+ * @jest-environment jsdom
+ */
+
+import { loadMenu } from "./menu.js";
+
+global.fetch = jest.fn();
+
+describe("loadMenu", () => {
+
+    beforeEach(() => {
+
+        document.body.innerHTML = `
+            <div id="menu-container"></div>
+        `;
+
+        fetch.mockClear();
+    });
+
+    test("успешно загружает меню", async () => {
+
+        fetch.mockResolvedValue({
+
+            ok: true,
+
+            json: async () => ([
+
+                {
+                    id: 1,
+                    name: "Пицца",
+                    description: "Сырная",
+                    price: 500,
+                    image_url: "pizza.webp",
+                    category: "Пиццы"
+                }
+
+            ])
+        });
+
+        await loadMenu();
+
+        const container =
+            document.getElementById(
+                "menu-container"
+            );
+
+        expect(
+            container.innerHTML
+        ).toContain("Пицца");
+
+        expect(
+            container.innerHTML
+        ).toContain("500 ₽");
+    });
+
+    test("показывает ошибку при невалидном ответе", async () => {
+
+        fetch.mockResolvedValue({
+
+            ok: true,
+
+            json: async () => ({
+                error: true
+            })
+        });
+
+        await loadMenu();
+
+        expect(
+            document.body.innerHTML
+        ).toContain(
+            "Меню пока недоступно"
+        );
+    });
+
+    test("игнорирует битые элементы", async () => {
+
+        fetch.mockResolvedValue({
+
+            ok: true,
+
+            json: async () => ([
+
+                {
+                    id: 1,
+                    name: "Бургер",
+                    price: 300,
+                    category: "Бургеры"
+                },
+
+                {
+                    bad: true
+                }
+
+            ])
+        });
+
+        await loadMenu();
+
+        expect(
+            document.body.innerHTML
+        ).toContain("Бургер");
+
+        expect(
+            document.body.innerHTML
+        ).not.toContain("bad");
+    });
+
+    test("показывает ошибку API", async () => {
+
+        fetch.mockResolvedValue({
+
+            ok: false,
+            status: 500
+        });
+
+        await loadMenu();
+
+        expect(
+            document.body.innerHTML
+        ).toContain(
+            "Ошибка загрузки меню"
+        );
+    });
+
+    test("использует fallback значения", async () => {
+
+        fetch.mockResolvedValue({
+
+            ok: true,
+
+            json: async () => ([
+
+                {
+                    id: 1,
+                    name: "Суп",
+                    price: 200,
+                    category: "Супы"
+                }
+
+            ])
+        });
+
+        await loadMenu();
+
+        expect(
+            document.body.innerHTML
+        ).toContain(
+            "Описание отсутствует"
+        );
+
+        expect(
+            document.body.innerHTML
+        ).toContain(
+            "fallback.webp"
+        );
+    });
+
+});
