@@ -11,7 +11,6 @@ import (
 	"restaurant/models"
 )
 
-
 func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io/mdk2/")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
@@ -25,7 +24,7 @@ func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 
 	if r.Method != http.MethodPost {
-		http.Error(w, "No Get, PLS!!!", http.StatusMethodNotAllowed) 
+		http.Error(w, "No Get, PLS!!!", http.StatusMethodNotAllowed)
 		log.Print("[WARN] try method GET OrdersHAND")
 		return
 	}
@@ -74,7 +73,7 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 
 	if r.Method != http.MethodPost {
-		http.Error(w, "No Get, PLS!!!", http.StatusMethodNotAllowed) 
+		http.Error(w, "No Get, PLS!!!", http.StatusMethodNotAllowed)
 		log.Print("[WARN] try method GET ReservationsHand")
 		return
 	}
@@ -86,18 +85,21 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	log.Println("[LOG] data reservations received",res)
+	log.Println("[LOG] data reservations received", res)
 	_, err := db.Pool.Exec(ctx,
 		`INSERT INTO reservations (name, phone, date, time, guests) VALUES ($1,$2,$3,$4,$5)`,
 		res.Name, res.Phone, res.Date, res.Time, res.Guests,
 	)
-	
+
 	if err != nil {
 		log.Println("[WARN] DB Insert error:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-log.Println("[LOG] reservationhand сработал ")
+	log.Println("[LOG] reservationhand сработал ")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+}
+func GetMenu(w http.ResponseWriter, r *http.Request) {
+
 }
