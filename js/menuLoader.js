@@ -1,4 +1,4 @@
-const API_URL = "/api/menu";
+const API_URL = "https://qwefsdfsdsg-mdk.hf.space/api/menu";
 
 export async function loadMenuFromAPI() {
   try {
