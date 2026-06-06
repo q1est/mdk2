@@ -1,3 +1,5 @@
+import "./menuLoader.js";
+
 import "./cart.js";
 
 import "./modal.js";

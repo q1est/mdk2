@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"os"
-	"restaurant/db"
 	"restaurant/models"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -34,8 +33,8 @@ func ConnectPostgres() {
 
 	CreateTables(ctx)
 }
-func SelectItem([]models.MenuItem, error) {
-	rows, err := db.Pool.Query(
+func SelectItem() ([]models.MenuItem, error) {
+	rows, err := Pool.Query(
 		context.Background(),
 		`SELECT
     id,
@@ -48,4 +47,27 @@ func SelectItem([]models.MenuItem, error) {
 	WHERE available = true
 	`,
 	)
+	if err != nil {
+		log.Println("[ERROR] Query error:", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var items []models.MenuItem
+	for rows.Next() {
+		var item models.MenuItem
+		err := rows.Scan(&item.ID, &item.Name, &item.Description, &item.Price, &item.Category, &item.ImageURL)
+		if err != nil {
+			log.Println("[ERROR] Scan error:", err)
+			return nil, err
+		}
+		items = append(items, item)
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Println("[ERROR] Rows error:", err)
+		return nil, err
+	}
+
+	return items, nil
 }

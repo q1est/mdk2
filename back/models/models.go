@@ -21,10 +21,10 @@ type Order struct {
 }
 
 type MenuItem struct {
-	ID           int    `json:"id"`
-	Name         string `json:"name"`
-	Descripition string `json:"desctripton"`
-	Price        int    `json:"price"`
-	Category     string `json:"category"`
-	ImageURL     string `json:"image_url"`
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Price       int    `json:"price"`
+	Category    string `json:"category"`
+	ImageURL    string `json:"image_url"`
 }

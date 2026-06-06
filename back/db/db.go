@@ -41,14 +41,16 @@ func CreateTables(ctx context.Context) {
 		log.Fatal("[ERROR]Failed to create orders table:", err)
 	}
 	menuQeury := ` 
-		id SERIAL PRIMARY KEY,
-		name TEXT NOT NULL,
-		description TEXT,
-		price INT NOT NULL,
-		category TEXT NOT NULL,
-		image_url TEXT NOT NULL,
-		avaiblable BOOLEAN DEFAULT true, 
-		created_at TIMESTAMP DEFAULT NOW()
+		CREATE TABLE IF NOT EXISTS menu_items (
+			id SERIAL PRIMARY KEY,
+			name TEXT NOT NULL,
+			description TEXT,
+			price INT NOT NULL,
+			category TEXT NOT NULL,
+			image_url TEXT NOT NULL,
+			available BOOLEAN DEFAULT true, 
+			created_at TIMESTAMP DEFAULT NOW()
+		)
 	`
 	_, err = Pool.Exec(ctx, menuQeury)
 	if err != nil {

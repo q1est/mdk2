@@ -16,7 +16,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/orders", handle.OrdersHandler)
-
+	mux.HandleFunc("/api/menu", handle.GetMenu)
 	mux.HandleFunc("/api/reservations", handle.ReservationsHandler)
 	logmux := logs.LogMiddleware(mux)
 
