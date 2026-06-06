@@ -2,7 +2,10 @@ module restaurant
 
 go 1.25.0
 
-require github.com/jackc/pgx/v5 v5.9.1
+require (
+	github.com/golang-jwt/jwt/v5 v5.0.0
+	github.com/jackc/pgx/v5 v5.9.1
+)
 
 require (
 	github.com/golang-jwt/jwt/v5 v5.3.1
