@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заказы - Админ панель MDK2</title>
+  
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Tabler Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/tabler-icons.css" rel="stylesheet">
+  
+  <!-- Theme CSS -->
+  <link href="/admin/css/theme.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/admin/menu.html">
+        <i class="ti ti-home"></i> MDK2 Админ
+      </a>
+      
+      <div class="ms-auto d-flex align-items-center gap-3">
+        <div class="user-menu">
+          <div class="user-avatar" id="user-avatar">A</div>
+          <div>
+            <div class="fw-bold" id="user-name">Администратор</div>
+          </div>
+        </div>
+        <button class="btn btn-outline-danger btn-sm" id="logout-button">
+          <i class="ti ti-logout"></i> Выход
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar" style="width: 250px;">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/menu.html">
+            <i class="ti ti-utensils"></i> Меню
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/admin/orders.html">
+            <i class="ti ti-receipt"></i> Заказы
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#analytics">
+            <i class="ti ti-chart-bar"></i> Аналитика
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#settings">
+            <i class="ti ti-settings"></i> Настройки
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content flex-grow-1">
+      <div class="page-header">
+        <h1><i class="ti ti-receipt"></i> Управление заказами</h1>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-outline-secondary" id="orders-refresh-button" title="Обновить">
+            <i class="ti ti-refresh"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <input 
+                type="text" 
+                class="form-control" 
+                id="orders-search" 
+                placeholder="Поиск по номеру заказа..."
+              >
+            </div>
+            <div class="col-md-6">
+              <select class="form-select" id="orders-status-filter">
+                <option value="">Все статусы</option>
+                <option value="pending">В ожидании</option>
+                <option value="confirmed">Подтвержден</option>
+                <option value="preparing">Готовится</option>
+                <option value="ready">Готов</option>
+                <option value="delivered">Доставлен</option>
+                <option value="cancelled">Отменен</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders Table -->
+      <div class="card">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover" id="orders-table">
+              <thead>
+                <tr>
+                  <th>ID Заказа</th>
+                  <th>Клиент</th>
+                  <th>Статус</th>
+                  <th>Сумма</th>
+                  <th>Дата</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table-body">
+                <tr>
+                  <td colspan="6" class="text-center py-5 text-muted">
+                    <p>Функция заказов будет реализована на этапе 2</p>
+                    <p>
+                      <small>
+                        Требуется реализация:<br>
+                        - OrdersTable.init() модуль<br>
+                        - GET /api/admin/orders endpoint<br>
+                        - PATCH /api/admin/orders/{id} endpoint
+                      </small>
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- App Scripts -->
+  <script src="/admin/js/config.js"></script>
+  <script src="/admin/js/storage.js"></script>
+  <script src="/admin/js/auth.js"></script>
+  <script src="/admin/js/api.js"></script>
+  <script src="/admin/js/utils.js"></script>
+  <script src="/admin/js/pages/orders.js"></script>
+</body>
+</html>

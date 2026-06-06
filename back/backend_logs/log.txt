@@ -1,0 +1,1 @@
+2026/06/06 19:29:25 postgres.go:19: [ERROR] DATABASE_URL is not set!
