@@ -6,25 +6,30 @@ import (
 	"os"
 	"restaurant/db"
 	"restaurant/handle"
+	"restaurant/logs"
 )
 
 func main() {
-	db.ConnectDBOrder()
-	defer db.PoolOrder.Close()
+	logs.Log()
 	db.ConnectPostgres()
 	defer db.Pool.Close()
 
-
-	http.HandleFunc("/api/orders", handle.OrdersHandler) 
-	
-	http.HandleFunc("/api/reservations", handle.ReservationsHandler)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/api/orders", handle.OrdersHandler)
+	mux.HandleFunc("/api/menu", handle.GetMenu)
+	mux.HandleFunc("/api/reservations", handle.ReservationsHandler)
+	logmux := logs.LogMiddleware(mux)
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "7860"
+		log.Println("[WARN], not get port, default port 7860")
 	}
 
-	log.Println("Server started on :" + port)
+	log.Println("[LOG]Server started on :" + port)
+	err := http.ListenAndServe(":"+port, logmux)
+	if err != nil {
+		log.Fatal("[ERROR] not start", err)
+	}
 
-	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
