@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"restaurant/db"
 	"restaurant/handle"
@@ -14,50 +16,99 @@ import (
 func main() {
 	logs.Log()
 
-	db.ConnectPostgres()
-	defer db.Pool.Close()
+	databaseURL := os.Getenv("DATABASE_URL")
+	if databaseURL == "" {
+		log.Println("[WARN] DATABASE_URL not set — skipping DB connection (development mode)")
+	} else {
+		db.ConnectPostgres()
+		defer func() {
+			if db.Pool != nil {
+				db.Pool.Close()
+			}
+		}()
+	}
 
 	mux := http.NewServeMux()
 
-	// Публичные API
+	// Публичные маршруты
 	mux.HandleFunc("/api/orders", handle.OrdersHandler)
-	mux.HandleFunc("/api/menu", handle.GetMenu)
+	mux.HandleFunc("/api/menu", handle.GetMenu1)
 	mux.HandleFunc("/api/reservations", handle.ReservationsHandler)
 
-	// Админский логин
+	// Логин админа
 	mux.HandleFunc("/api/admin/login", handle.AdminLogin)
 
-	// JWT Middleware
+	// JWT
 	adminAuth := middleware.JWTAuth(func(token string) (string, string, error) {
 		claims, err := handle.ValidateJWT(token)
 		if err != nil {
 			return "", "", err
 		}
+
 		return claims.AdminID, claims.Email, nil
 	})
 
-	// Защищенные маршруты админки
-	mux.Handle(
-		"/api/admin/menu",
-		adminAuth(http.HandlerFunc(handle.AdminGetMenu)),
-	)
+	// Защищённая админка
+	mux.Handle("/api/admin/menu", adminAuth(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			handle.AdminGetMenuSafe(w, r)
+			return
+		}
+		if r.Method == http.MethodPost {
+			handle.AdminCreateMenu(w, r)
+			return
+		}
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	})))
 
-	// Общие middleware
-	var handler http.Handler = mux
+	mux.Handle("/api/admin/menu/", adminAuth(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		id := strings.TrimPrefix(r.URL.Path, "/api/admin/menu/")
+		if id == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		switch r.Method {
+		case http.MethodPut:
+			handle.AdminUpdateMenu(w, r, id)
+		case http.MethodDelete:
+			handle.AdminDeleteMenu(w, r, id)
+		case http.MethodPatch:
+			handle.AdminPatchMenu(w, r, id)
+		default:
+			w.WriteHeader(http.StatusMethodNotAllowed)
+		}
+	})))
 
-	handler = middleware.CORS(handler)
-	handler = middleware.SecurityHeaders(handler)
-	handler = logs.LogMiddleware(handler)
+	// Provide runtime config for frontend (inject API base from env)
+	mux.HandleFunc("/admin/config.js", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/javascript")
+		api := os.Getenv("API_BASE_URL")
+		if api == "" {
+			api = "http://localhost:8080"
+		}
+		fmt.Fprintf(w, "window.__API_BASE_URL__ = '%s';", api)
+	})
+
+	// Serve admin static files
+	mux.Handle("/admin/", http.StripPrefix("/admin/", http.FileServer(http.Dir("./admin/"))))
+
+	// Serve uploaded assets
+	mux.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads/"))))
+
+	// Upload endpoint (admin protected)
+	mux.Handle("/api/admin/upload", adminAuth(http.HandlerFunc(handle.AdminUploadImage)))
+
+	handler := logs.LogMiddleware(mux)
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "7860"
-		log.Println("[WARN] PORT not found, using default 7860")
 	}
 
 	log.Println("[LOG] Server started on :" + port)
 
-	if err := http.ListenAndServe(":"+port, handler); err != nil {
-		log.Fatal("[ERROR] Server start failed:", err)
+	err := http.ListenAndServe(":"+port, handler)
+	if err != nil {
+		log.Fatal(err)
 	}
 }

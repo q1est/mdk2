@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 	"restaurant/db"
-	
+
 	"restaurant/tg"
 
 	"restaurant/models"
@@ -14,7 +14,9 @@ import (
 
 func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 
-
+	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
 		return
@@ -60,7 +62,9 @@ func OrdersHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
-	
+	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
 
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
@@ -96,4 +100,31 @@ func ReservationsHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("[LOG] reservationhand сработал ")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+}
+func GetMenu1(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "https://q1est.github.io/mdk2/")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	if r.Method != http.MethodGet {
+		http.Error(w, "Only GET allowed", http.StatusMethodNotAllowed)
+		log.Print("[WARN] try method POST/PUT GetMenu")
+		return
+	}
+
+	items, err := db.SelectItem()
+	if err != nil {
+		log.Println("[ERROR] SelectItem error:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(items)
 }

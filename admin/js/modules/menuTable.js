@@ -23,7 +23,7 @@ const MenuTable = {
     try {
       UI.showTableSkeleton(this.tableBody);
       
-      const data = await API.getMenu();
+      const data = await API.getMenuAdmin();
       this.state.allItems = data.items || data || [];
       this.renderTable();
     } catch (error) {

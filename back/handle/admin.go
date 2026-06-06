@@ -35,7 +35,7 @@ func AdminLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := GenerateJWT("1", "admin@mdk2.com", 24*time.Hour)
+	token, err := GenerateJWT("1", adminEmail, 24*time.Hour)
 	if err != nil {
 		http.Error(w, "Token generation error", http.StatusInternalServerError)
 		return
@@ -45,7 +45,7 @@ func AdminLogin(w http.ResponseWriter, r *http.Request) {
 		Token: token,
 		User: models.User{
 			ID:    "1",
-			Email: "admin@mdk2.com",
+			Email: adminEmail,
 			Name:  "Administrator",
 		},
 	}
@@ -89,79 +89,6 @@ func HashPassword(password string) string {
 
 func CheckPassword(hash, password string) bool {
 	return hash == HashPassword(password)
-}
-
-func GetMenu(w http.ResponseWriter, r *http.Request) {
-	query := `
-		SELECT id, name, description, price, category, image_url, available, created_at, updated_at
-		FROM menu_items
-		WHERE deleted_at IS NULL
-		ORDER BY category, name
-	`
-
-	rows, err := db.Pool.Query(r.Context(), query)
-	if err != nil {
-		http.Error(w, "Database error", http.StatusInternalServerError)
-		return
-	}
-	defer rows.Close()
-
-	items := []models.AdminMenuItem{}
-	for rows.Next() {
-		var item models.AdminMenuItem
-		if err := rows.Scan(&item.ID, &item.Name, &item.Description, &item.Price,
-			&item.Category, &item.ImageURL, &item.Available, &item.CreatedAt, &item.UpdatedAt); err != nil {
-			continue
-		}
-		items = append(items, item)
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{"items": items})
-}
-
-func AdminGetMenu(w http.ResponseWriter, r *http.Request) {
-	category := r.URL.Query().Get("category")
-	available := r.URL.Query().Get("available")
-
-	query := `
-		SELECT id, name, description, price, category, image_url, available, created_at, updated_at, deleted_at
-		FROM menu_items
-		WHERE deleted_at IS NULL
-	`
-
-	if category != "" {
-		query += " AND category = '" + category + "'"
-	}
-
-	switch available {
-	case "true":
-		query += " AND available = true"
-	case "false":
-		query += " AND available = false"
-	}
-
-	query += " ORDER BY category, name"
-
-	rows, err := db.Pool.Query(r.Context(), query)
-	if err != nil {
-		http.Error(w, "Database error", http.StatusInternalServerError)
-		return
-	}
-	defer rows.Close()
-
-	items := []models.AdminMenuItem{}
-	for rows.Next() {
-		var item models.AdminMenuItem
-		if err := rows.Scan(&item.ID, &item.Name, &item.Description, &item.Price,
-			&item.Category, &item.ImageURL, &item.Available, &item.CreatedAt, &item.UpdatedAt, &item.DeletedAt); err != nil {
-			continue
-		}
-		items = append(items, item)
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{"items": items})
 }
 
 func AdminCreateMenu(w http.ResponseWriter, r *http.Request) {
