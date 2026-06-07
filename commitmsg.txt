@@ -1,0 +1,10 @@
+﻿Fix models/admin build errors, add Supabase upload handler, centralize CORS, update DB schema, and frontend JS fixes
+
+- Add updated_at and deleted_at to menu_items
+- Remove unused HashPassword/CheckPassword
+- Create handle/upload.go (Supabase POST upload, 5MB, allowed extensions, logs)
+- Wrap handler with middleware.CORS in main.go
+- Remove per-handler CORS headers
+- Fix menuTable, auth, orders, utils JS issues
+
+Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>

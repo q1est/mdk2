@@ -98,7 +98,7 @@ func main() {
 	// Upload endpoint (admin protected)
 	mux.Handle("/api/admin/upload", adminAuth(http.HandlerFunc(handle.AdminUploadImage)))
 
-	handler := logs.LogMiddleware(mux)
+	handler := logs.LogMiddleware(middleware.CORS(mux))
 
 	port := os.Getenv("PORT")
 	if port == "" {

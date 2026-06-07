@@ -10,8 +10,8 @@ const Auth = {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Ошибка при входе');
+        const text = await response.text();
+        throw new Error(text || 'Ошибка при входе');
       }
 
       const data = await response.json();

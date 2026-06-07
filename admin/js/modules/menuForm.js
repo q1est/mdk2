@@ -158,4 +158,3 @@ const MenuForm = {
 };
 
 window.MenuForm = MenuForm;
-window.MenuTable = MenuTable;

@@ -1,6 +1,5 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   Auth.protectRoute();
-  await OrdersTable.init('orders-table', 'orders-table-body');
   updateUserInfo();
 
   const logoutButton = document.getElementById('logout-button');

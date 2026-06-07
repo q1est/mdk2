@@ -1,8 +1,6 @@
 ﻿package handle
 
 import (
-"crypto/sha256"
-"encoding/hex"
 "encoding/json"
 "net/http"
 "os"
@@ -83,14 +81,7 @@ return nil, err
 return claims, nil
 }
 
-func HashPassword(password string) string {
-hash := sha256.Sum256([]byte(password))
-return hex.EncodeToString(hash[:])
-}
 
-func CheckPassword(hash, password string) bool {
-return hash == HashPassword(password)
-}
 
 func AdminCreateMenu(w http.ResponseWriter, r *http.Request) {
 var req models.CreateMenuRequest

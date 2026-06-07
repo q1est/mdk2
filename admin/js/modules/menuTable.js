@@ -25,7 +25,7 @@ const MenuTable = {
       
       const data = await API.getMenuAdmin();
       this.state.allItems = data.items || data || [];
-      this.renderTable();
+      this.filter();
     } catch (error) {
       console.error('Error loading menu:', error);
       Utils.showError('Ошибка загрузки меню: ' + error.message);
