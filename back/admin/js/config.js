@@ -30,7 +30,7 @@ CONFIG.API = {
 };
 
 CONFIG.MENU_CATEGORIES = [
-  { value: 'snacs', label: 'Закуски' },
+  { value: 'snacks', label: 'Закуски' },
   { value: 'main', label: 'Основные блюда' },
   { value: 'desserts', label: 'Десерты' },
   { value: 'drinks', label: 'Напитки' },
