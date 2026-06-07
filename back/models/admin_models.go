@@ -1,1 +1,1 @@
-﻿package models\n
+﻿package models
