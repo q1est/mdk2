@@ -1,5 +1,5 @@
 const CONFIG = {
-  API_BASE_URL: (window.__API_BASE_URL__ || 'http://localhost:8080') + '/api',
+API_BASE_URL: (window.__API_BASE_URL__ || 'https://qwefsdfsdsg-mdk.hf.space') + '/api',
   
   ENDPOINTS: {
     LOGIN: '/admin/login',
