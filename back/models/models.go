@@ -62,7 +62,6 @@ AdminID string `json:"admin_id"`
 Email   string `json:"email"`
 jwt.RegisteredClaims
 }
-package models
 
 type Reservation struct {
 	Name    string `json:"name"`
