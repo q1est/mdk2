@@ -72,7 +72,7 @@ func CORS(next http.Handler) http.Handler {
 			"https://q1est.github.io",
 			"https://q1est.github.io/mdk2",
 			"https://q1est.github.io/mdk2/", 
-			"https://qwefsdfsdsg-mdk.hf.space"
+			"https://qwefsdfsdsg-mdk.hf.space",
 		}
 
 		allowed := false
