@@ -12,6 +12,23 @@ import (
 	"time"
 )
 
+type LokiStream struct {
+	Stream map[string]string `json:"stream"`
+	Values [][]string        `json:"values"`
+}
+
+type LokiPushRequest struct {
+	Streams []LokiStream `json:"streams"`
+}
+
+type LokiWriter struct {
+	URL        string
+	HTTPClient *http.Client
+	Labels     map[string]string
+}
+
+
+
 func Log() {
 	err := os.Mkdir("backend_logs", os.ModePerm)
 
@@ -24,12 +41,11 @@ func Log() {
 		log.Println("[WARN]didn't open file ", err)
 	}
 
-	
 	loki := NewLokiWriter()
 
 	var multiwriter io.Writer
 	if loki != nil {
-		
+
 		multiwriter = io.MultiWriter(os.Stdout, logFile, loki)
 	} else {
 
@@ -58,7 +74,7 @@ func GetIP(r *http.Request) string {
 func LogMiddleware(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ip := GetIP(r) 
+		ip := GetIP(r)
 		start := time.Now()
 		next.ServeHTTP(w, r)
 		log.Printf("[REQUEST] method = %s path = %s ip = %s user_agent = %s latency = %s",
@@ -71,30 +87,14 @@ func LogMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-type LokiStream struct {
-	Stream map[string]string `json:"stream"`
-	Values [][]string        `json:"values"`
-}
-
-type LokiPushRequest struct {
-	Streams []LokiStream `json:"streams"`
-}
-
-
-type LokiWriter struct {
-	URL        string
-	HTTPClient *http.Client
-	Labels     map[string]string
-}
-
 func NewLokiWriter() *LokiWriter {
 	url := os.Getenv("LOKI_URL")
 	if url == "" {
-	log.Println("err set link Loki")
+		log.Println("err set link Loki")
 		return nil
 	}
 	return &LokiWriter{
-		URL:url,
+		URL:        url,
 		HTTPClient: &http.Client{Timeout: 5 * time.Second},
 		Labels: map[string]string{
 			"app": "go-backend",
@@ -104,10 +104,9 @@ func NewLokiWriter() *LokiWriter {
 }
 
 func (l *LokiWriter) Write(p []byte) (n int, err error) {
-	
+
 	n = len(p)
 
-	
 	message := string(bytes.TrimSpace(p))
 
 	go func(msg string) {
@@ -130,18 +129,18 @@ func (l *LokiWriter) Write(p []byte) (n int, err error) {
 		}
 
 		req, err := http.NewRequest("POST", l.URL, bytes.NewBuffer(body))
-		if err != nil { 
-				fmt.Printf("[LOKI-ERROR] Failed to send log: %v\n", err)
+		if err != nil {
+			fmt.Printf("[LOKI-ERROR] Failed to send log: %v\n", err)
 			return
-		} 
-	
+		}
+
 		req.Header.Set("Content-Type", "application/json")
 
 		resp, err := l.HTTPClient.Do(req)
 		if err != nil {
 			return
 		}
-		defer resp.Body.Close() 
+		defer resp.Body.Close()
 		if resp.StatusCode != http.StatusNoContent && resp.StatusCode != http.StatusOK {
 			var buf bytes.Buffer
 			buf.ReadFrom(resp.Body)

@@ -8,7 +8,6 @@ import (
 	"restaurant/models"
 )
 
-// AdminGetMenuSafe is a parameterized, safe version of AdminGetMenu
 func AdminGetMenuSafe(w http.ResponseWriter, r *http.Request) {
 	if db.Pool == nil {
 		w.Header().Set("Content-Type", "application/json")

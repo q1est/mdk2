@@ -30,15 +30,12 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	// Публичные маршруты
 	mux.HandleFunc("/api/orders", handle.OrdersHandler)
 	mux.HandleFunc("/api/menu", handle.GetMenu1)
 	mux.HandleFunc("/api/reservations", handle.ReservationsHandler)
 
-	// Логин админа
 	mux.HandleFunc("/api/admin/login", handle.AdminLogin)
 
-	// JWT
 	adminAuth := middleware.JWTAuth(func(token string) (string, string, error) {
 		claims, err := handle.ValidateJWT(token)
 		if err != nil {
@@ -79,7 +76,6 @@ func main() {
 		}
 	})))
 
-	// Provide runtime config for frontend (inject API base from env)
 	mux.HandleFunc("/admin/config.js", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/javascript")
 		api := os.Getenv("API_BASE_URL")
@@ -89,13 +85,10 @@ func main() {
 		fmt.Fprintf(w, "window.__API_BASE_URL__ = '%s';", api)
 	})
 
-	// Serve admin static files
 	mux.Handle("/admin/", http.StripPrefix("/admin/", http.FileServer(http.Dir("./admin/"))))
 
-	// Serve uploaded assets
 	mux.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads/"))))
 
-	// Upload endpoint (admin protected)
 	mux.Handle("/api/admin/upload", adminAuth(http.HandlerFunc(handle.AdminUploadImage)))
 
 	handler := logs.LogMiddleware(middleware.CORS(mux))
