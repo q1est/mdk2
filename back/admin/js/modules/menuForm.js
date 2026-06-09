@@ -41,7 +41,12 @@ const MenuForm = {
     this.form.reset();
     this.form.querySelector('[name="available"]').checked = true;
 
-    this.modalElement.show();
+    this.modalElement.show(); 
+    // сбросить превью при открытии формы создания
+const imageInput = document.getElementById('image-upload-input');
+if (imageInput) imageInput.value = '';
+const preview = document.getElementById('image-preview');
+if (preview) preview.style.display = 'none';
   },
 
   openEditModal(item) {
@@ -65,7 +70,32 @@ const MenuForm = {
     const submitButton = this.form.querySelector('button[type="submit"]');
     if (submitButton) {
       this.form.addEventListener('submit', (e) => this.onSubmit(e));
+    } 
+    const imageInput = document.getElementById('image-upload-input');
+if (imageInput) {
+  imageInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      Utils.showNotification('Загрузка изображения...', 'info', 0);
+      const result = await API.uploadImage(file);
+      
+      // вставляем URL в поле
+      this.form.querySelector('[name="image_url"]').value = result.url;
+      
+      // показываем превью
+      const preview = document.getElementById('image-preview');
+      const previewImg = document.getElementById('image-preview-img');
+      previewImg.src = result.url;
+      preview.style.display = 'block';
+
+      Utils.showSuccess('Изображение загружено');
+    } catch (error) {
+      Utils.showError('Ошибка загрузки: ' + error.message);
     }
+  });
+}
   },
 
   async onSubmit(e) {
