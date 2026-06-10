@@ -1,7 +1,9 @@
 # MDK2 — Сервис заказа блюд
 
 **Ссылки на проект:** 
-Сайт и админка работают с VPN!!!
+
+Сайт и админка работают с VPN!!! 
+
 -  Сайт: https://q1est.github.io/mdk2/
 -  Админка: https://qwefsdfsdsg-mdk.hf.space/admin/login.html
 
@@ -340,7 +342,7 @@ Content-Type: application/json
 **Grafana Loki** 
 
 <img src="docx/png/grafana.jpg" alt="Grafana Loki" width="500" />
----
+
 
 ## Авторы
 
@@ -349,7 +351,7 @@ Content-Type: application/json
 * [Fendy973](https://github.com/Fendy973) — frontend, документация, дизайн
 * [cryne69](https://github.com/cryne69) — frontend, документация, тестирование, пользоватильсике соглашения
 
----
+
 
 ## Лицензия
 
