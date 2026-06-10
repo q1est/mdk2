@@ -113,7 +113,7 @@ if (form) {
 
         const response =
           await fetch(
-            "https://qwefsdfsdsg-mdk.hf.space/api/order",
+            "https://qwefsdfsdsg-mdk.hf.space/api/orders",
             {
 
               method: "POST",
