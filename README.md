@@ -323,12 +323,21 @@ Content-Type: application/json
 
 <img src="docx/png/cart.jpg" alt="Корзина" width="500" />
 
-**Админ-панель**
 
-<img src="docx/png/Admin.jpg" alt="Админ-панель" width="500" />
+**Orders** 
+
 <img src="docx/png/order.jpg" alt="Заказы" width="500" />
+
+**Reservations** 
+
 <img src="docx/png/reservation.jpg" alt="Бронирование" width="500" />
 
+**Админ-панель**
+
+<img src="docx/png/Admin.jpg" alt="Админ-панель" width="500" /> 
+
+**Grafana Loki** 
+<img src="docx/png/grafana.jpg" alt="Grafana Loki" width="500" />
 ---
 
 ## Авторы
